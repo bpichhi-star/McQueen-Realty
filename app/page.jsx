@@ -366,7 +366,7 @@ const LISTINGS = [
 const EDITORIAL = [
   {
     title: 'The New Bel Air',
-    sub: 'How LA's most storied hillside is quietly reinventing itself',
+    sub: "How LA's most storied hillside is quietly reinventing itself",
     size: 'large',
     bg: 'linear-gradient(145deg,#3a3530,#1a1714)',
   },
