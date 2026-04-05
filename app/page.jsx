@@ -138,7 +138,10 @@ const GLOBAL_CSS = `
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover; object-position: center;
+    transition: opacity 1.2s ease;
   }
+  .hero-video.active  { opacity: 1; }
+  .hero-video.inactive { opacity: 0; }
 
   .hero-overlay {
     position: absolute; inset: 0;
@@ -155,6 +158,36 @@ const GLOBAL_CSS = `
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
+  }
+
+  /* Scene location label */
+  .hero-scene-label {
+    position: absolute; bottom: 3.5rem; left: 2.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-scene-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+  }
+  .hero-scene-name {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.62rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: rgba(255,255,255,0.55);
+    transition: opacity 0.6s ease;
+  }
+
+  /* Scene progress dots */
+  .hero-dots {
+    position: absolute; bottom: 3.7rem; right: 2.5rem;
+    display: flex; gap: 0.5rem;
+  }
+  .hero-dot {
+    width: 18px; height: 2px;
+    background: rgba(255,255,255,0.25);
+    transition: background 0.4s, width 0.4s;
+  }
+  .hero-dot.active-dot {
+    background: var(--gold); width: 32px;
   }
 
   .hero-wordmark {
@@ -191,12 +224,21 @@ const GLOBAL_CSS = `
     animation: scrollPulse 2s ease-in-out infinite;
   }
 
-  /* ── Search Section (replaces "Our Exclusives") ── */
+  /* ── Search Section ── */
   .search-section {
+    position: relative;
     background: var(--near-black);
     padding: 7rem 2.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
   }
+  .search-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center 30%;
+    opacity: 0.22;
+    transition: opacity 0.6s;
+  }
+  .search-content { position: relative; z-index: 2; }
 
   .search-headline {
     font-family: 'Barlow Condensed', sans-serif;
@@ -463,29 +505,76 @@ function Nav({ scrolled, overVideo }) {
 }
 
 /* ─── Video Hero ─────────────────────────────────────────────────────────── */
+const SCENES = [
+  {
+    src: 'https://videos.pexels.com/video-files/3051985/3051985-uhd_2560_1440_25fps.mp4',
+    poster: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1800&q=80&auto=format',
+    label: 'Los Angeles',
+  },
+  {
+    src: 'https://videos.pexels.com/video-files/2169880/2169880-uhd_2560_1440_25fps.mp4',
+    poster: 'https://images.unsplash.com/photo-1420745981456-b95fe23f5753?w=1800&q=80',
+    label: 'Malibu',
+  },
+  {
+    src: 'https://videos.pexels.com/video-files/1843319/1843319-hd_1920_1080_25fps.mp4',
+    poster: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=1800&q=80',
+    label: 'Santa Monica',
+  },
+  {
+    src: 'https://videos.pexels.com/video-files/3770441/3770441-uhd_2560_1440_25fps.mp4',
+    poster: 'https://images.unsplash.com/photo-1543328023-cd0b8ff72739?w=1800&q=80',
+    label: 'Beverly Hills',
+  },
+];
+
 function VideoHero({ heroRef }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const videoRefs = useRef([]);
+
+  useEffect(() => {
+    // Start playing the first video
+    videoRefs.current[0]?.play().catch(() => {});
+
+    const timer = setInterval(() => {
+      setActiveIdx(prev => {
+        const next = (prev + 1) % SCENES.length;
+        // Preload + play the next video
+        const nextVid = videoRefs.current[next];
+        if (nextVid) {
+          nextVid.currentTime = 0;
+          nextVid.play().catch(() => {});
+        }
+        return next;
+      });
+    }, 7000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="hero-video-wrap" ref={heroRef}>
-      {/* Looping video — poster shows while video loads */}
-      <video
-        className="hero-video"
-        autoPlay muted loop playsInline
-        poster="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1800&q=80&auto=format"
-      >
-        <source
-          src="https://videos.pexels.com/video-files/3051985/3051985-uhd_2560_1440_25fps.mp4"
-          type="video/mp4"
-        />
-        <source
-          src="https://videos.pexels.com/video-files/2169880/2169880-uhd_2560_1440_25fps.mp4"
-          type="video/mp4"
-        />
-      </video>
+
+      {/* All scene videos stacked, fade between them */}
+      {SCENES.map((scene, i) => (
+        <video
+          key={i}
+          ref={el => videoRefs.current[i] = el}
+          className={`hero-video ${i === activeIdx ? 'active' : 'inactive'}`}
+          autoPlay={i === 0}
+          muted
+          loop
+          playsInline
+          poster={scene.poster}
+        >
+          <source src={scene.src} type="video/mp4" />
+        </video>
+      ))}
 
       {/* Cinematic overlay */}
       <div className="hero-overlay anim-fadeIn" />
 
-      {/* Centered wordmark — logo in the frame */}
+      {/* Centered wordmark */}
       <div className="hero-center">
         <div className="anim-d1" style={{ textAlign: 'center' }}>
           <div className="hero-wordmark">
@@ -503,6 +592,27 @@ function VideoHero({ heroRef }) {
         <div className="hero-rule anim-d2" />
       </div>
 
+      {/* Scene location label — bottom left */}
+      <div className="hero-scene-label anim-d5">
+        <div className="hero-scene-dot" />
+        <span className="hero-scene-name">{SCENES[activeIdx].label}</span>
+      </div>
+
+      {/* Scene progress dots — bottom right */}
+      <div className="hero-dots anim-d5">
+        {SCENES.map((_, i) => (
+          <div
+            key={i}
+            className={`hero-dot${i === activeIdx ? ' active-dot' : ''}`}
+            onClick={() => {
+              setActiveIdx(i);
+              videoRefs.current[i]?.play().catch(() => {});
+            }}
+            style={{ cursor: 'pointer' }}
+          />
+        ))}
+      </div>
+
       {/* Scroll hint */}
       <div className="hero-scroll anim-d5">
         <span>Scroll</span>
@@ -516,9 +626,17 @@ function VideoHero({ heroRef }) {
 function SearchSection() {
   const [query, setQuery] = useState('');
 
+  // Cycle bg images in sync with video scenes
+  const SEARCH_BG = 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1800&q=80&auto=format';
+
   return (
     <section className="search-section" id="search">
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      {/* Full-bleed photo behind the text */}
+      <div
+        className="search-bg"
+        style={{ backgroundImage: `url(${SEARCH_BG})` }}
+      />
+      <div className="search-content" style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Label */}
         <p style={{
           fontFamily: "'Jost', sans-serif",
