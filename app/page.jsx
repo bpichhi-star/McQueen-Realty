@@ -204,7 +204,8 @@ export default function Home() {
         .hero-center {
           position: absolute; inset: 0;
           display: flex; flex-direction: column;
-          align-items: center; justify-content: center;
+          align-items: flex-start; justify-content: center;
+          padding: 0 2.5rem;
         }
 
         .hero-scene-label {
@@ -222,11 +223,16 @@ export default function Home() {
         .hero-dot.active-dot { background: var(--gold); width: 32px; }
 
         .hero-wordmark {
-          font-family: 'Jost', sans-serif; font-weight: 300;
-          font-size: clamp(1rem, 2.5vw, 1.8rem); letter-spacing: 0.55em;
-          text-transform: uppercase; color: rgba(255,255,255,0.88);
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+          font-size: clamp(4rem, 10vw, 11rem); letter-spacing: -0.01em;
+          text-transform: uppercase; color: var(--white); line-height: 0.9;
         }
-        .hero-wordmark strong { font-weight: 600; letter-spacing: 0.55em; }
+        .hero-wordmark .brand-sub {
+          display: block; font-family: 'Jost', sans-serif; font-weight: 300;
+          font-size: clamp(0.7rem, 1.5vw, 1rem); letter-spacing: 0.5em;
+          color: var(--gold); margin-top: 0.8rem; text-transform: uppercase;
+        }
+        .hero-wordmark strong { font-weight: 900; }
 
         .hero-rule {
           width: 1px; height: 60px;
@@ -460,15 +466,23 @@ export default function Home() {
         <div className="hero-overlay anim-fadeIn" />
 
         <div className="hero-center">
-          <div className="anim-d1" style={{ textAlign: 'center' }}>
-            <div className="hero-wordmark"><strong>McQueen</strong></div>
-            <div style={{
-              fontFamily: "'Jost', sans-serif", fontWeight: 300,
-              fontSize: 'clamp(0.55rem, 1.2vw, 0.8rem)', letterSpacing: '0.7em',
-              textTransform: 'uppercase', color: 'var(--gold)', marginTop: '0.8rem'
-            }}>Realty</div>
+          <div className="anim-d1">
+            <div className="hero-wordmark">
+              <strong>McQueen<br/>Realty</strong>
+              <span className="brand-sub">Luxury Real Estate · Southern California</span>
+            </div>
           </div>
-          <div className="hero-rule anim-d2" />
+          <div className="anim-d2" style={{
+            marginTop: '2.5rem',
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 900, fontStyle: 'italic',
+            fontSize: 'clamp(2.5rem, 6vw, 7rem)',
+            lineHeight: 0.88, letterSpacing: '-0.01em',
+            textTransform: 'uppercase', color: 'rgba(255,255,255,0.9)',
+            maxWidth: '700px',
+          }}>
+            Where Do<br/>You Want<br/>To Live?
+          </div>
         </div>
 
         <div className="hero-scene-label anim-d5">
