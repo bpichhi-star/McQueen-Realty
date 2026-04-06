@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 const VIDEOS = [
   {
-    src: 'https://pub-ad56d343e8ab4bbaa42e4b8b7cc3847b.r2.dev/hero1.mp4',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-mansion-41779-large.mp4',
     poster: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1800&q=80&auto=format',
     label: 'Los Angeles',
   },
@@ -13,8 +13,13 @@ const VIDEOS = [
     label: 'Malibu',
   },
   {
-    src: 'https://pub-ad56d343e8ab4bbaa42e4b8b7cc3847b.r2.dev/hero3.mp4',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-beach-resort-4152-large.mp4',
     poster: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=1800&q=80',
+    label: 'Santa Monica',
+  },
+  {
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-flying-over-a-suburban-neighborhood-at-sunset-41773-large.mp4',
+    poster: 'https://images.unsplash.com/photo-1543328023-cd0b8ff72739?w=1800&q=80',
     label: 'Beverly Hills',
   },
 ];
