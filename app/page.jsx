@@ -479,13 +479,16 @@ export default function Home() {
 
       {/* ── SEARCH ── */}
       <section className="search-section" id="search">
-        <div className="search-bg" style={{ backgroundImage: `url(${VIDEOS[active].poster})` }} />
+        <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1420745981456-b95fe23f5753?w=1800&q=80')" }} />
         <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
 
           <div className="search-bar">
-            <input placeholder="City, neighborhood, or ZIP code" />
+            <input
+              placeholder="City, neighborhood, or ZIP code"
+              onKeyDown={(e) => { if (e.key === 'Enter') window.location.href = '/listings'; }}
+            />
             <div className="search-bar-divider" />
-            <button className="search-bar-btn">
+            <button className="search-bar-btn" onClick={() => window.location.href = '/listings'}>
               Start Your Search{' '}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -500,16 +503,6 @@ export default function Home() {
           </a>
         </div>
       </section>
-
-      {/* ── STATS ── */}
-      <div className="stats-strip">
-        {[['$2.4B+','Closed Sales Volume'],['340+','Properties Represented'],['10+','Years of Excellence'],['98%','Client Satisfaction']].map(([v,l]) => (
-          <div key={l} className="stat-cell">
-            <div className="stat-val">{v}</div>
-            <div className="stat-label">{l}</div>
-          </div>
-        ))}
-      </div>
 
       {/* ── MARQUEE ── */}
       <div className="marquee-wrap">
