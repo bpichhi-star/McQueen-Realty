@@ -65,15 +65,10 @@ export default function Home() {
   const handleSearch = () => {
     const q = searchQuery.trim();
     if (!q) {
-      window.open('https://www.realtor.com/propertyrecord-search/Los-Angeles-County_CA', '_blank');
+      window.location.href = '/listings';
       return;
     }
-    if (/^\d{5}$/.test(q)) {
-      window.open(`https://www.realtor.com/propertyrecord-search/${q}`, '_blank');
-    } else {
-      const slug = q.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
-      window.open(`https://www.realtor.com/propertyrecord-search/${slug}_CA`, '_blank');
-    }
+    window.location.href = '/listings?q=' + encodeURIComponent(q);
   };
 
   const navClass = overVideo
