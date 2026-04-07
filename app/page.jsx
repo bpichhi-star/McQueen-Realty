@@ -73,9 +73,15 @@ export default function Home() {
   }, [active]);
 
   const handleSearch = () => {
-    // Scroll to live MLS search section
-    const el = document.getElementById('mls-search');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) params.set('q', searchQuery.trim());
+    if (beds)               params.set('beds', beds);
+    if (baths)              params.set('baths', baths);
+    if (priceRange.min)     params.set('priceMin', priceRange.min);
+    if (priceRange.max)     params.set('priceMax', priceRange.max);
+    if (homeTypes.length)   params.set('types', homeTypes.join(','));
+    const qs = params.toString();
+    window.location.href = '/search' + (qs ? '?' + qs : '');
   };
 
   useEffect(() => {
@@ -118,7 +124,7 @@ export default function Home() {
     );
   };
 
-
+  const navClass = overVideo
     ? 'nav-wrap over-video'
     : scrolled
     ? 'nav-wrap scrolled-light'
@@ -885,7 +891,7 @@ export default function Home() {
               </div>
 
               {/* More Filters → goes to full listings page */}
-              <button className="csearch-pill" onClick={() => { document.getElementById('mls-search')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <button className="csearch-pill" onClick={() => { window.location.href = '/search'; }}>
                 More Filters
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
@@ -905,7 +911,7 @@ export default function Home() {
             </div>
           </div>{/* /csearch-panel */}
 
-          <a href="#mls-search" className="search-exclusives">
+          <a href="/search" className="search-exclusives">
             View Our Exclusives{' '}
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -919,7 +925,7 @@ export default function Home() {
         <div className="marquee-track">
           {['Beverly Hills','Bel Air','Malibu','Santa Monica','Pacific Palisades','Holmby Hills','Brentwood','Los Feliz',
             'Beverly Hills','Bel Air','Malibu','Santa Monica','Pacific Palisades','Holmby Hills','Brentwood','Los Feliz'].map((name, i) => (
-            <a key={i} href="#mls-search" className="marquee-item"
+            <a key={i} href={`/search?q=${encodeURIComponent(name)}`} className="marquee-item"
               style={{ color: i % 2 === 0 ? 'rgba(255,255,255,0.82)' : 'var(--gold)' }}>
               {name}<span className="marquee-dot">◆</span>
             </a>
