@@ -29,6 +29,14 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [overVideo, setOverVideo] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  // Compass-style search state
+  const [searchTab, setSearchTab] = useState('buy');
+  const [beds, setBeds] = useState('');
+  const [baths, setBaths] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [homeTypes, setHomeTypes] = useState([]);
+  const [openFilter, setOpenFilter] = useState(null);
+  const searchPanelRef = useRef(null);
   const videoRefs = useRef([]);
   const intervalRef = useRef(null);
 
@@ -63,13 +71,28 @@ export default function Home() {
   }, [active]);
 
   const handleSearch = () => {
+    const params = new URLSearchParams();
     const q = searchQuery.trim();
-    if (!q) {
-      window.location.href = '/listings';
-      return;
-    }
-    window.location.href = '/listings?q=' + encodeURIComponent(q);
+    if (q) params.set('q', q);
+    if (beds) params.set('beds', beds);
+    if (baths) params.set('baths', baths);
+    if (priceRange.min) params.set('priceMin', priceRange.min);
+    if (priceRange.max) params.set('priceMax', priceRange.max);
+    if (homeTypes.length) params.set('types', homeTypes.join(','));
+    if (searchTab !== 'buy') params.set('tab', searchTab);
+    const qs = params.toString();
+    window.location.href = '/listings' + (qs ? '?' + qs : '');
   };
+
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (searchPanelRef.current && !searchPanelRef.current.contains(e.target)) {
+        setOpenFilter(null);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
 
   const navClass = overVideo
     ? 'nav-wrap over-video'
@@ -252,47 +275,120 @@ export default function Home() {
           animation: scrollPulse 2s ease-in-out infinite;
         }
 
+        /* ── SEARCH SECTION SHELL ── */
         .search-section {
-          position: relative; background: var(--near-black); padding: 7rem 2.5rem;
+          position: relative; background: var(--near-black); padding: 6rem 2.5rem 7rem;
           border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden;
         }
         .search-bg {
           position: absolute; inset: 0; background-size: cover;
-          background-position: center 30%; opacity: 0.22; transition: opacity 0.6s;
+          background-position: center 30%; opacity: 0.18; transition: opacity 0.6s;
         }
         .search-content { position: relative; z-index: 2; }
 
         .search-headline {
           font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: italic;
-          font-size: clamp(4.5rem, 11vw, 13rem); line-height: 0.88; letter-spacing: -0.01em;
-          text-transform: uppercase; color: var(--white); margin-bottom: 1.5rem;
+          font-size: clamp(3.5rem, 8vw, 9rem); line-height: 0.88; letter-spacing: -0.01em;
+          text-transform: uppercase; color: var(--white); margin-bottom: 1.2rem;
         }
-
         .search-sub {
-          font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 300;
-          letter-spacing: 0.08em; color: rgba(255,255,255,0.45); margin-bottom: 3rem;
+          font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 300;
+          letter-spacing: 0.08em; color: rgba(255,255,255,0.42); margin-bottom: 2.5rem;
         }
 
-        .search-bar {
-          display: flex; max-width: 780px;
-          background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+        /* ── COMPASS PANEL ── */
+        .csearch-panel {
+          background: var(--white);
+          max-width: 820px;
+          box-shadow: 0 20px 80px rgba(0,0,0,0.45);
         }
-        .search-bar input {
+
+        /* Tabs */
+        .csearch-tabs {
+          display: flex; border-bottom: 1px solid var(--border); padding: 0 1.5rem;
+        }
+        .csearch-tab {
+          padding: 0.85rem 1.1rem; background: transparent; border: none;
+          border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer;
+          font-family: 'Jost', sans-serif; font-size: 0.7rem; font-weight: 500;
+          letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint);
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .csearch-tab.tab-active { color: var(--black); border-bottom-color: var(--gold); }
+
+        /* Input row */
+        .csearch-input-row {
+          display: flex; align-items: center; padding: 0 1.5rem;
+          height: 62px; border-bottom: 1px solid var(--border); gap: 0.8rem;
+        }
+        .csearch-input {
           flex: 1; background: transparent; border: none; outline: none;
-          padding: 0 1.8rem; height: 62px; font-family: 'Jost', sans-serif;
-          font-size: 0.92rem; font-weight: 300; color: var(--white); letter-spacing: 0.03em;
+          font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 300;
+          color: var(--black); letter-spacing: 0.02em;
         }
-        .search-bar input::placeholder { color: rgba(255,255,255,0.3); }
-        .search-bar-divider { width: 1px; margin: 16px 0; background: rgba(255,255,255,0.12); }
-        .search-bar-btn {
-          display: flex; align-items: center; gap: 0.5rem;
-          height: 62px; padding: 0 2.2rem; background: var(--gold); border: none;
-          font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.18em;
-          font-weight: 500; text-transform: uppercase; color: var(--white);
-          transition: background 0.2s; flex-shrink: 0;
+        .csearch-input::placeholder { color: var(--faint); }
+        .csearch-divider { width: 1px; height: 26px; background: var(--border); flex-shrink: 0; }
+        .csearch-search-btn {
+          display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 1.4rem;
+          background: var(--black); color: var(--white); border: none; cursor: pointer;
+          font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.14em;
+          font-weight: 500; text-transform: uppercase; flex-shrink: 0;
+          transition: background 0.2s;
         }
-        .search-bar-btn:hover { background: var(--gold-dark); }
+        .csearch-search-btn:hover { background: var(--gold); }
 
+        /* Filter pills row */
+        .csearch-filters {
+          display: flex; align-items: center; padding: 0 1.5rem;
+          height: 50px; gap: 6px; overflow-x: auto;
+        }
+        .csearch-filters::-webkit-scrollbar { display: none; }
+        .csearch-pill {
+          display: flex; align-items: center; gap: 4px; height: 30px; padding: 0 11px;
+          background: transparent; border: 1px solid var(--border); color: var(--black);
+          font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.04em;
+          font-weight: 400; white-space: nowrap; cursor: pointer; position: relative;
+          transition: border-color 0.15s, background 0.15s, color 0.15s;
+        }
+        .csearch-pill:hover { border-color: var(--black); }
+        .csearch-pill.pill-active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+        /* Dropdowns */
+        .csearch-dropdown {
+          position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px;
+          background: var(--white); border: 1px solid var(--border);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.14); z-index: 600; padding: 1.2rem 1.4rem 1.4rem;
+        }
+        .csearch-dd-label {
+          font-family: 'Jost', sans-serif; font-size: 0.55rem; letter-spacing: 0.2em;
+          text-transform: uppercase; color: var(--faint); margin-bottom: 0.7rem; display: block;
+        }
+        .csearch-opt-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        .csearch-opt {
+          padding: 4px 11px; border: 1px solid var(--border); background: transparent;
+          color: var(--black); font-family: 'Jost', sans-serif; font-size: 0.68rem;
+          cursor: pointer; transition: all 0.12s;
+        }
+        .csearch-opt:hover { border-color: var(--black); }
+        .csearch-opt.opt-sel { background: var(--black); color: var(--white); border-color: var(--black); }
+        .csearch-price-inputs { display: flex; gap: 8px; align-items: center; margin-top: 0.8rem; }
+        .csearch-price-inp {
+          flex: 1; height: 34px; padding: 0 10px; border: 1px solid var(--border); outline: none;
+          font-family: 'Jost', sans-serif; font-size: 0.75rem; color: var(--black); background: transparent;
+        }
+        .csearch-price-inp:focus { border-color: var(--black); }
+        .csearch-dd-apply {
+          display: flex; justify-content: flex-end; margin-top: 1rem;
+        }
+        .csearch-dd-apply button {
+          height: 32px; padding: 0 16px; background: var(--black); color: var(--white); border: none;
+          cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.62rem;
+          letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+          transition: background 0.2s;
+        }
+        .csearch-dd-apply button:hover { background: var(--gold); }
+
+        /* Exclusives link below panel */
         .search-exclusives {
           display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 1.8rem;
           font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.16em;
@@ -490,23 +586,159 @@ export default function Home() {
       <section className="search-section" id="search">
         <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
         <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
+          <h2 className="search-headline">Find Your<br/>Next Home</h2>
+          <p className="search-sub">Search luxury properties across Southern California</p>
 
-          <div className="search-bar">
-            <input
-              placeholder="City, neighborhood, or ZIP code"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
-            />
-            <div className="search-bar-divider" />
-            <button className="search-bar-btn" onClick={handleSearch}>
-              Start Your Search{' '}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          {/* Compass Panel */}
+          <div className="csearch-panel" ref={searchPanelRef}>
+
+            {/* ── Tabs ── */}
+            <div className="csearch-tabs">
+              {['Buy','Rent'].map(t => (
+                <button
+                  key={t}
+                  className={`csearch-tab ${searchTab === t.toLowerCase() ? 'tab-active' : ''}`}
+                  onClick={() => setSearchTab(t.toLowerCase())}
+                >{t}</button>
+              ))}
+            </div>
+
+            {/* ── Location Input ── */}
+            <div className="csearch-input-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" strokeWidth="2" strokeLinecap="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
-            </button>
-          </div>
-          <a href="#listings" className="search-exclusives">
+              <input
+                className="csearch-input"
+                placeholder="City, neighborhood, ZIP, or address"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+              />
+              <div className="csearch-divider" />
+              <button className="csearch-search-btn" onClick={handleSearch}>
+                Search
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* ── Filter Pills ── */}
+            <div className="csearch-filters">
+
+              {/* Beds & Baths */}
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <button
+                  className={`csearch-pill ${openFilter === 'beds' || beds || baths ? 'pill-active' : ''}`}
+                  onClick={() => setOpenFilter(openFilter === 'beds' ? null : 'beds')}
+                >
+                  {beds && baths ? `${beds} bd · ${baths} ba` : beds ? `${beds} bd` : baths ? `${baths} ba` : 'Beds & Baths'}
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                {openFilter === 'beds' && (
+                  <div className="csearch-dropdown" style={{ minWidth: 280 }}>
+                    <span className="csearch-dd-label">Bedrooms</span>
+                    <div className="csearch-opt-row">
+                      {['Any','1+','2+','3+','4+','5+'].map(o => (
+                        <button key={o} className={`csearch-opt ${(o === 'Any' && !beds) || beds === o ? 'opt-sel' : ''}`}
+                          onClick={() => setBeds(o === 'Any' ? '' : o)}>{o}</button>
+                      ))}
+                    </div>
+                    <span className="csearch-dd-label" style={{ marginTop: '1rem' }}>Bathrooms</span>
+                    <div className="csearch-opt-row">
+                      {['Any','1+','2+','3+','4+'].map(o => (
+                        <button key={o} className={`csearch-opt ${(o === 'Any' && !baths) || baths === o ? 'opt-sel' : ''}`}
+                          onClick={() => setBaths(o === 'Any' ? '' : o)}>{o}</button>
+                      ))}
+                    </div>
+                    <div className="csearch-dd-apply"><button onClick={() => setOpenFilter(null)}>Apply</button></div>
+                  </div>
+                )}
+              </div>
+
+              {/* Price */}
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <button
+                  className={`csearch-pill ${openFilter === 'price' || priceRange.min || priceRange.max ? 'pill-active' : ''}`}
+                  onClick={() => setOpenFilter(openFilter === 'price' ? null : 'price')}
+                >
+                  {priceRange.min || priceRange.max
+                    ? `${priceRange.min ? '$' + Number(priceRange.min).toLocaleString() : 'Min'} – ${priceRange.max ? '$' + Number(priceRange.max).toLocaleString() : 'Max'}`
+                    : 'Price'}
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                {openFilter === 'price' && (
+                  <div className="csearch-dropdown" style={{ minWidth: 310 }}>
+                    <span className="csearch-dd-label">Quick Select</span>
+                    <div className="csearch-opt-row" style={{ marginBottom: '0.4rem' }}>
+                      {[['Under $1M',0,1000000],['$1M–$3M',1000000,3000000],['$3M–$6M',3000000,6000000],['$6M–$10M',6000000,10000000],['$10M+',10000000,'']].map(([l,mn,mx]) => (
+                        <button key={l}
+                          className={`csearch-opt ${String(priceRange.min) === String(mn) && String(priceRange.max) === String(mx) ? 'opt-sel' : ''}`}
+                          onClick={() => setPriceRange({ min: mn, max: mx })}>{l}</button>
+                      ))}
+                    </div>
+                    <span className="csearch-dd-label" style={{ marginTop: '0.8rem' }}>Custom Range</span>
+                    <div className="csearch-price-inputs">
+                      <input className="csearch-price-inp" placeholder="Min $"
+                        value={priceRange.min ? priceRange.min.toLocaleString() : ''}
+                        onChange={(e) => setPriceRange(p => ({ ...p, min: e.target.value.replace(/\D/g,'') }))} />
+                      <span style={{ color: 'var(--faint)', fontSize: '0.7rem', flexShrink: 0 }}>–</span>
+                      <input className="csearch-price-inp" placeholder="Max $"
+                        value={priceRange.max ? priceRange.max.toLocaleString() : ''}
+                        onChange={(e) => setPriceRange(p => ({ ...p, max: e.target.value.replace(/\D/g,'') }))} />
+                    </div>
+                    <div className="csearch-dd-apply"><button onClick={() => setOpenFilter(null)}>Apply</button></div>
+                  </div>
+                )}
+              </div>
+
+              {/* Home Type */}
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <button
+                  className={`csearch-pill ${openFilter === 'type' || homeTypes.length > 0 ? 'pill-active' : ''}`}
+                  onClick={() => setOpenFilter(openFilter === 'type' ? null : 'type')}
+                >
+                  {homeTypes.length === 0 ? 'Home Type' : homeTypes.length === 1 ? homeTypes[0] : `${homeTypes.length} Types`}
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                {openFilter === 'type' && (
+                  <div className="csearch-dropdown">
+                    <span className="csearch-dd-label">Property Type</span>
+                    <div className="csearch-opt-row">
+                      {['House','Condo','Townhouse','Multi-Family','Land'].map(t => (
+                        <button key={t}
+                          className={`csearch-opt ${homeTypes.includes(t) ? 'opt-sel' : ''}`}
+                          onClick={() => setHomeTypes(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])}>{t}</button>
+                      ))}
+                    </div>
+                    <div className="csearch-dd-apply"><button onClick={() => setOpenFilter(null)}>Apply</button></div>
+                  </div>
+                )}
+              </div>
+
+              {/* More Filters → goes to full listings page */}
+              <button className="csearch-pill" onClick={() => { window.location.href = '/listings'; }}>
+                More Filters
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+
+              {/* Clear all — only when filters are active */}
+              {(beds || baths || priceRange.min || priceRange.max || homeTypes.length > 0) && (
+                <button
+                  onClick={() => { setBeds(''); setBaths(''); setPriceRange({ min: '', max: '' }); setHomeTypes([]); }}
+                  style={{
+                    marginLeft: 'auto', background: 'transparent', border: 'none', cursor: 'pointer',
+                    fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', letterSpacing: '0.06em',
+                    color: 'var(--mid)', textDecoration: 'underline', whiteSpace: 'nowrap', flexShrink: 0,
+                  }}
+                >Clear all</button>
+              )}
+
+            </div>
+          </div>{/* /csearch-panel */}
+
+          <a href="/listings" className="search-exclusives">
             View Our Exclusives{' '}
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
