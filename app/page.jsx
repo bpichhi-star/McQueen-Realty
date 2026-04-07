@@ -28,6 +28,7 @@ export default function Home() {
   const [active, setActive] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [overVideo, setOverVideo] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const videoRefs = useRef([]);
   const intervalRef = useRef(null);
 
@@ -60,6 +61,20 @@ export default function Home() {
 
     return () => clearInterval(intervalRef.current);
   }, [active]);
+
+  const handleSearch = () => {
+    const q = searchQuery.trim();
+    if (!q) {
+      window.open('https://www.realtor.com/propertyrecord-search/Los-Angeles-County_CA', '_blank');
+      return;
+    }
+    if (/^\d{5}$/.test(q)) {
+      window.open(`https://www.realtor.com/propertyrecord-search/${q}`, '_blank');
+    } else {
+      const slug = q.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
+      window.open(`https://www.realtor.com/propertyrecord-search/${slug}_CA`, '_blank');
+    }
+  };
 
   const navClass = overVideo
     ? 'nav-wrap over-video'
@@ -485,10 +500,12 @@ export default function Home() {
           <div className="search-bar">
             <input
               placeholder="City, neighborhood, or ZIP code"
-              onKeyDown={(e) => { if (e.key === 'Enter') window.location.href = '/listings'; }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
             />
             <div className="search-bar-divider" />
-            <button className="search-bar-btn" onClick={() => window.location.href = '/listings'}>
+            <button className="search-bar-btn" onClick={handleSearch}>
               Start Your Search{' '}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
