@@ -463,7 +463,6 @@ export default function Home() {
 
 <div className="hero-center">
         <div className="anim-d1">
-          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, marginBottom: '1.5rem' }}>Los Angeles · Beverly Hills · Malibu</p>
           <h1 className="search-headline" style={{ color: 'var(--white)', margin: 0 }}>Where Do<br/>You Want<br/>To Live?</h1>
           <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.85rem', fontWeight: 300, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.55)', marginTop: '1.2rem' }}>McQueen Realty. Leaders in Southern California luxury property.</p>
         </div>
@@ -489,7 +488,7 @@ export default function Home() {
 
       {/* ── SEARCH ── */}
       <section className="search-section" id="search">
-        <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1420745981456-b95fe23f5753?w=1800&q=80')" }} />
+        <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
         <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
 
           <div className="search-bar">
