@@ -36,6 +36,8 @@ export default function Home() {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [homeTypes, setHomeTypes] = useState([]);
   const [openFilter, setOpenFilter] = useState(null);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [idxLoaded, setIdxLoaded] = useState(false);
   const searchPanelRef = useRef(null);
   const videoRefs = useRef([]);
   const intervalRef = useRef(null);
@@ -94,7 +96,37 @@ export default function Home() {
     return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
-  const navClass = overVideo
+  const handleGeolocate = () => {
+    if (!navigator.geolocation) return;
+    setGeoLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await res.json();
+          const city =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.suburb ||
+            data.address?.county ||
+            '';
+          const state = data.address?.state_code || data.address?.state || '';
+          if (city) setSearchQuery(state ? `${city}, ${state}` : city);
+        } catch {
+          // silently fail — user still sees their location coordinates
+        } finally {
+          setGeoLoading(false);
+        }
+      },
+      () => setGeoLoading(false),
+      { timeout: 8000 }
+    );
+  };
+
+
     ? 'nav-wrap over-video'
     : scrolled
     ? 'nav-wrap scrolled-light'
@@ -296,7 +328,69 @@ export default function Home() {
           letter-spacing: 0.08em; color: rgba(255,255,255,0.42); margin-bottom: 2.5rem;
         }
 
-        /* ── COMPASS PANEL ── */
+        .csearch-geo-btn {
+          display: flex; align-items: center; justify-content: center;
+          width: 34px; height: 34px; background: transparent;
+          border: 1px solid var(--border); cursor: pointer; flex-shrink: 0;
+          color: var(--faint); transition: border-color 0.15s, color 0.15s;
+        }
+        .csearch-geo-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .csearch-geo-btn.spinning svg { animation: spinOnce 0.8s ease both; }
+        @keyframes spinOnce {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+
+        /* ── IDX WRAPPER ── */
+        .idx-section {
+          padding: 6rem 2.5rem;
+          border-bottom: 1px solid var(--border);
+          background: var(--off-white);
+        }
+        .idx-header {
+          display: flex; justify-content: space-between;
+          align-items: flex-end; margin-bottom: 2.5rem;
+        }
+        .idx-frame-wrap {
+          position: relative;
+          border: 1px solid var(--border);
+          background: var(--white);
+          overflow: hidden;
+          height: 700px;
+        }
+        .idx-loader {
+          position: absolute; inset: 0;
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          background: var(--white); z-index: 10;
+          gap: 1.2rem;
+          transition: opacity 0.5s ease;
+        }
+        .idx-loader.hidden { opacity: 0; pointer-events: none; }
+        .idx-loader-bar {
+          width: 120px; height: 1px; background: var(--light-gray); overflow: hidden;
+        }
+        .idx-loader-fill {
+          height: 100%; background: var(--gold);
+          animation: idxLoad 1.8s cubic-bezier(.4,0,.2,1) infinite;
+        }
+        @keyframes idxLoad {
+          0%   { width: 0%;   margin-left: 0; }
+          50%  { width: 60%;  margin-left: 20%; }
+          100% { width: 0%;   margin-left: 100%; }
+        }
+        .idx-loader-label {
+          font-family: 'Jost', sans-serif;
+          font-size: 0.58rem; letter-spacing: 0.28em;
+          text-transform: uppercase; color: var(--faint);
+        }
+        .idx-frame-wrap iframe {
+          display: block; border: none;
+          width: 100%; height: 100%;
+          opacity: 0; transition: opacity 0.6s ease;
+        }
+        .idx-frame-wrap iframe.loaded { opacity: 1; }
+
         .csearch-panel {
           background: var(--white);
           max-width: 820px;
@@ -615,6 +709,18 @@ export default function Home() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
               />
+              {/* Geo button */}
+              <button
+                className={`csearch-geo-btn ${geoLoading ? 'spinning' : ''}`}
+                onClick={handleGeolocate}
+                title="Use my location"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  <circle cx="12" cy="12" r="7" strokeDasharray="2 2"/>
+                </svg>
+              </button>
               <div className="csearch-divider" />
               <button className="csearch-search-btn" onClick={handleSearch}>
                 Search
@@ -799,24 +905,41 @@ export default function Home() {
       </section>
 
       {/* ── MLS SEARCH ── */}
-      <section style={{ padding: '6rem 2.5rem', borderBottom: '1px solid var(--border)', background: 'var(--off-white)' }}>
+      <section className="idx-section" id="mls-search">
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
+          <div className="idx-header">
             <div>
               <span className="sec-label">Live MLS · CRMLS</span>
-              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.5rem, 4.5vw, 4.5rem)' }}>Search Properties</h2>
+              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.5rem, 4.5vw, 4.5rem)' }}>Search All Properties</h2>
             </div>
             <a href="/listings" className="link-underline">Full Screen Search →</a>
           </div>
-          <div style={{ border: '1px solid var(--border)', height: 680, background: 'var(--white)' }}>
+
+          <div className="idx-frame-wrap">
+            {/* Loading state */}
+            <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
+              <div style={{
+                fontFamily: "'Jost', sans-serif", fontWeight: 600, fontSize: '0.72rem',
+                letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--black)'
+              }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
+              <div className="idx-loader-bar"><div className="idx-loader-fill" /></div>
+              <div className="idx-loader-label">Loading Live Listings</div>
+            </div>
+
             <iframe
               src="https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c"
-              width="100%" height="100%" frameBorder="0"
-              style={{ display: 'block', border: 'none' }}
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              marginWidth="0"
+              marginHeight="0"
               title="McQueen Realty Property Search"
               allowFullScreen
+              className={idxLoaded ? 'loaded' : ''}
+              onLoad={() => setIdxLoaded(true)}
             />
           </div>
+
           <div style={{ marginTop: '2rem', textAlign: 'center' }}>
             <a href="/listings" className="btn-primary">
               Open Full Property Search{' '}
