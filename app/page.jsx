@@ -208,15 +208,6 @@ export default function Home() {
           padding: 0 2.5rem;
         }
 
-        .hero-scene-label {
-          position: absolute; bottom: 3.5rem; left: 2.5rem;
-          display: flex; align-items: center; gap: 0.75rem;
-        }
-        .hero-scene-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
-        .hero-scene-name {
-          font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.28em;
-          text-transform: uppercase; color: rgba(255,255,255,0.55); transition: opacity 0.6s ease;
-        }
 
         .hero-dots { position: absolute; bottom: 3.7rem; right: 2.5rem; display: flex; gap: 0.5rem; }
         .hero-dot { width: 18px; height: 2px; background: rgba(255,255,255,0.25); transition: background 0.4s, width 0.4s; }
@@ -234,11 +225,6 @@ export default function Home() {
         }
         .hero-wordmark strong { font-weight: 900; }
 
-        .hero-rule {
-          width: 1px; height: 60px;
-          background: linear-gradient(to bottom, rgba(196,163,90,0.8), transparent);
-          margin: 2rem auto 0;
-        }
 
         .hero-scroll {
           position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
@@ -473,13 +459,8 @@ export default function Home() {
             style={{ height: 'clamp(60px, 10vw, 110px)', width: 'auto', filter: 'invert(1) brightness(2)' }}
           />
         </div>
-        <div className="hero-rule anim-d2" />
-      </div>
 
-        <div className="hero-scene-label anim-d5">
-          <div className="hero-scene-dot" />
-          <span className="hero-scene-name">{VIDEOS[active].label}</span>
-        </div>
+      </div>
 
         <div className="hero-dots anim-d5">
           {VIDEOS.map((_, i) => (
