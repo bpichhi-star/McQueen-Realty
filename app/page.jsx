@@ -72,16 +72,62 @@ export default function Home() {
     return () => clearInterval(intervalRef.current);
   }, [active]);
 
+  // Neighborhood → ZIP lookup for ApexIDX
+  const NEIGHBORHOOD_ZIPS = {
+    'beverly hills': '90210', 'bel air': '90077', 'malibu': '90265',
+    'santa monica': '90401', 'pacific palisades': '90272', 'brentwood': '90049',
+    'hollywood hills': '90046', 'west hollywood': '90046', 'calabasas': '91302',
+    'hidden hills': '91301', 'holmby hills': '90024', 'westwood': '90024',
+    'los feliz': '90027', 'silver lake': '90026', 'studio city': '91604',
+    'sherman oaks': '91403', 'encino': '91316', 'woodland hills': '91364',
+    'hancock park': '90004', 'los angeles': '90001', 'west la': '90025',
+    'culver city': '90232', 'marina del rey': '90292', 'playa del rey': '90293',
+    'manhattan beach': '90266', 'hermosa beach': '90254', 'redondo beach': '90277',
+    'palos verdes': '90274', 'san marino': '91108', 'pasadena': '91101',
+    'glendale': '91201', 'burbank': '91501', 'tarzana': '91356',
+    'northridge': '91324', 'chatsworth': '91311', 'porter ranch': '91326',
+  };
+
+  const buildApexUrl = () => {
+    const q = searchQuery.trim().toLowerCase();
+    let locationSegment = '';
+
+    // Check if it's a ZIP code (5 digits)
+    if (/^\d{5}$/.test(q)) {
+      locationSegment = `${q}_autosearch`;
+    } else if (q && NEIGHBORHOOD_ZIPS[q]) {
+      // Known neighborhood → use its ZIP
+      locationSegment = `${NEIGHBORHOOD_ZIPS[q]}_autosearch`;
+    } else if (q) {
+      // Unknown — try as-is in autosearch (ApexIDX may handle it)
+      locationSegment = `${encodeURIComponent(q)}_autosearch`;
+    }
+
+    // Property types
+    const typeMap = { 'House': 'home', 'Condo': 'Condo', 'Townhouse': 'Townhouse', 'Multi-Family': 'MultiFamily', 'Land': 'Land' };
+    const types = homeTypes.length > 0
+      ? homeTypes.map(t => typeMap[t] || t).join(',')
+      : 'home,Townhouse';
+
+    // Build URL segments
+    const segments = [
+      'lastModified_orderBy',
+      'desc_order',
+      priceRange.min ? `${priceRange.min}_price` : null,
+      priceRange.max ? `${priceRange.max}_maxprice` : null,
+      beds ? `${beds.replace('+','')}_br` : null,
+      `${types}_homeType`,
+      'active,short-sales,foreclosures_homeStatus',
+      locationSegment || null,
+    ].filter(Boolean).join('/');
+
+    return `https://apexidx.com/idx_lite/results/EN_LA/${segments}`;
+  };
+
   const handleSearch = () => {
-    const params = new URLSearchParams();
-    if (searchQuery.trim()) params.set('q', searchQuery.trim());
-    if (beds)               params.set('beds', beds);
-    if (baths)              params.set('baths', baths);
-    if (priceRange.min)     params.set('priceMin', priceRange.min);
-    if (priceRange.max)     params.set('priceMax', priceRange.max);
-    if (homeTypes.length)   params.set('types', homeTypes.join(','));
-    const qs = params.toString();
-    window.location.href = '/search' + (qs ? '?' + qs : '');
+    const apexUrl = buildApexUrl();
+    const encoded = encodeURIComponent(apexUrl);
+    window.location.href = `/search?src=${encoded}`;
   };
 
   useEffect(() => {
