@@ -3,7 +3,13 @@ import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 function SearchPageInner() {
+  const params  = useSearchParams();
   const [loaded, setLoaded] = useState(false);
+
+  // Get the pre-built ApexIDX URL, or fall back to general search
+  const src = params.get('src')
+    ? decodeURIComponent(params.get('src'))
+    : 'https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus';
 
   return (
     <>
@@ -168,12 +174,12 @@ function SearchPageInner() {
           letter-spacing: 0.26em; text-transform: uppercase; color: var(--faint);
         }
 
-        /* Iframe — offset upward to clip Matrix top toolbar */
+        /* Iframe — full height, no offset needed for ApexIDX */
         .idx-viewport iframe {
           position: absolute;
-          top: -82px; left: 0;
+          top: 0; left: 0;
           width: 100%;
-          height: calc(100% + 82px);
+          height: 100%;
           border: none;
           opacity: 0;
           transition: opacity 0.7s ease;
@@ -238,7 +244,13 @@ function SearchPageInner() {
       {/* ── CONTEXT STRIP ── */}
       <div className="context-strip">
         <div className="cs-left">
-          <span className="cs-title">Southern California Properties</span>
+          <span className="cs-title">
+            {params.get('src')
+              ? decodeURIComponent(params.get('src')).includes('_autosearch')
+                ? `Search Results · ${decodeURIComponent(params.get('src')).match(/([^/]+)_autosearch/)?.[1] || 'Southern California'}`
+                : 'Search Results · Southern California'
+              : 'Southern California Properties'}
+          </span>
           <div className="cs-divider" />
           <span className="cs-live">Live MLS · Updated Daily</span>
         </div>
@@ -259,7 +271,7 @@ function SearchPageInner() {
         </div>
 
         <iframe
-          src="https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c"
+          src={src}
           frameBorder="0"
           title="McQueen Realty MLS Property Search"
           allowFullScreen
