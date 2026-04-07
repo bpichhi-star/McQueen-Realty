@@ -73,17 +73,9 @@ export default function Home() {
   }, [active]);
 
   const handleSearch = () => {
-    const params = new URLSearchParams();
-    const q = searchQuery.trim();
-    if (q) params.set('q', q);
-    if (beds) params.set('beds', beds);
-    if (baths) params.set('baths', baths);
-    if (priceRange.min) params.set('priceMin', priceRange.min);
-    if (priceRange.max) params.set('priceMax', priceRange.max);
-    if (homeTypes.length) params.set('types', homeTypes.join(','));
-    if (searchTab !== 'buy') params.set('tab', searchTab);
-    const qs = params.toString();
-    window.location.href = '/listings' + (qs ? '?' + qs : '');
+    // Scroll to live MLS search section
+    const el = document.getElementById('mls-search');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   useEffect(() => {
@@ -341,32 +333,88 @@ export default function Home() {
           to   { transform: rotate(360deg); }
         }
 
-        /* ── IDX WRAPPER ── */
+        /* ── IDX FULL-BLEED ── */
         .idx-section {
-          padding: 6rem 2.5rem;
-          border-bottom: 1px solid var(--border);
-          background: var(--off-white);
-        }
-        .idx-header {
-          display: flex; justify-content: space-between;
-          align-items: flex-end; margin-bottom: 2.5rem;
-        }
-        .idx-frame-wrap {
           position: relative;
-          border: 1px solid var(--border);
           background: var(--white);
-          overflow: hidden;
-          height: 700px;
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
         }
+
+        /* Branded context bar above the iframe */
+        .idx-context-bar {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 1.4rem 2.5rem;
+          border-bottom: 1px solid var(--border);
+          background: var(--white);
+        }
+        .idx-context-left {
+          display: flex; align-items: center; gap: 1.6rem;
+        }
+        .idx-context-label {
+          font-family: 'Jost', sans-serif; font-size: 0.58rem;
+          letter-spacing: 0.24em; text-transform: uppercase;
+          color: var(--faint); font-weight: 500;
+        }
+        .idx-context-title {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+          font-size: 1.1rem; text-transform: uppercase;
+          letter-spacing: 0.04em; color: var(--black);
+        }
+        .idx-context-divider {
+          width: 1px; height: 24px; background: var(--border);
+        }
+        .idx-live-dot {
+          display: flex; align-items: center; gap: 6px;
+          font-family: 'Jost', sans-serif; font-size: 0.62rem;
+          letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint);
+        }
+        .idx-live-dot::before {
+          content: ''; width: 6px; height: 6px; border-radius: 50%;
+          background: #4CAF50;
+          box-shadow: 0 0 0 2px rgba(76,175,80,0.2);
+          animation: livePulse 2s ease infinite;
+        }
+        @keyframes livePulse {
+          0%, 100% { box-shadow: 0 0 0 2px rgba(76,175,80,0.2); }
+          50%       { box-shadow: 0 0 0 5px rgba(76,175,80,0); }
+        }
+        .idx-context-right {
+          display: flex; align-items: center; gap: 1.4rem;
+        }
+        .idx-contact-btn {
+          display: flex; align-items: center; gap: 6px;
+          height: 36px; padding: 0 1.4rem;
+          background: var(--black); color: var(--white); border: none;
+          font-family: 'Jost', sans-serif; font-size: 0.67rem;
+          letter-spacing: 0.12em; font-weight: 500; text-transform: uppercase;
+          cursor: pointer; transition: background 0.2s; text-decoration: none;
+        }
+        .idx-contact-btn:hover { background: var(--gold); }
+        .idx-disclaimer {
+          font-family: 'Jost', sans-serif; font-size: 0.6rem;
+          color: var(--faint); letter-spacing: 0.04em;
+        }
+
+        /* The clipping wrapper — hides Matrix chrome */
+        .idx-clip {
+          position: relative;
+          overflow: hidden;
+          height: 820px;
+          background: var(--white);
+        }
+
+        /* Loader overlay */
         .idx-loader {
           position: absolute; inset: 0;
           display: flex; flex-direction: column;
           align-items: center; justify-content: center;
           background: var(--white); z-index: 10;
           gap: 1.2rem;
-          transition: opacity 0.5s ease;
+          transition: opacity 0.6s ease;
+          pointer-events: none;
         }
-        .idx-loader.hidden { opacity: 0; pointer-events: none; }
+        .idx-loader.hidden { opacity: 0; }
         .idx-loader-bar {
           width: 120px; height: 1px; background: var(--light-gray); overflow: hidden;
         }
@@ -375,21 +423,34 @@ export default function Home() {
           animation: idxLoad 1.8s cubic-bezier(.4,0,.2,1) infinite;
         }
         @keyframes idxLoad {
-          0%   { width: 0%;   margin-left: 0; }
-          50%  { width: 60%;  margin-left: 20%; }
-          100% { width: 0%;   margin-left: 100%; }
+          0%   { width: 0%;  margin-left: 0; }
+          50%  { width: 60%; margin-left: 20%; }
+          100% { width: 0%;  margin-left: 100%; }
         }
         .idx-loader-label {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.58rem; letter-spacing: 0.28em;
-          text-transform: uppercase; color: var(--faint);
+          font-family: 'Jost', sans-serif; font-size: 0.58rem;
+          letter-spacing: 0.28em; text-transform: uppercase; color: var(--faint);
         }
-        .idx-frame-wrap iframe {
-          display: block; border: none;
-          width: 100%; height: 100%;
-          opacity: 0; transition: opacity 0.6s ease;
+
+        /* The iframe itself — offset upward to clip Matrix header */
+        .idx-clip iframe {
+          position: absolute;
+          top: -82px; left: 0;
+          width: 100%;
+          height: calc(100% + 82px);
+          border: none;
+          opacity: 0;
+          transition: opacity 0.7s ease;
         }
-        .idx-frame-wrap iframe.loaded { opacity: 1; }
+        .idx-clip iframe.loaded { opacity: 1; }
+
+        /* Bottom CTA bar */
+        .idx-cta-bar {
+          display: flex; align-items: center; justify-content: center;
+          gap: 2rem; padding: 1.8rem 2.5rem;
+          border-top: 1px solid var(--border);
+          background: var(--off-white);
+        }
 
         .csearch-panel {
           background: var(--white);
@@ -824,7 +885,7 @@ export default function Home() {
               </div>
 
               {/* More Filters → goes to full listings page */}
-              <button className="csearch-pill" onClick={() => { window.location.href = '/listings'; }}>
+              <button className="csearch-pill" onClick={() => { document.getElementById('mls-search')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 More Filters
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
@@ -844,7 +905,7 @@ export default function Home() {
             </div>
           </div>{/* /csearch-panel */}
 
-          <a href="/listings" className="search-exclusives">
+          <a href="#mls-search" className="search-exclusives">
             View Our Exclusives{' '}
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -858,7 +919,7 @@ export default function Home() {
         <div className="marquee-track">
           {['Beverly Hills','Bel Air','Malibu','Santa Monica','Pacific Palisades','Holmby Hills','Brentwood','Los Feliz',
             'Beverly Hills','Bel Air','Malibu','Santa Monica','Pacific Palisades','Holmby Hills','Brentwood','Los Feliz'].map((name, i) => (
-            <a key={i} href="#listings" className="marquee-item"
+            <a key={i} href="#mls-search" className="marquee-item"
               style={{ color: i % 2 === 0 ? 'rgba(255,255,255,0.82)' : 'var(--gold)' }}>
               {name}<span className="marquee-dot">◆</span>
             </a>
@@ -906,49 +967,61 @@ export default function Home() {
 
       {/* ── MLS SEARCH ── */}
       <section className="idx-section" id="mls-search">
-        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <div className="idx-header">
+
+        {/* Context bar — McQueen branded, sits above iframe */}
+        <div className="idx-context-bar">
+          <div className="idx-context-left">
             <div>
-              <span className="sec-label">Live MLS · CRMLS</span>
-              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.5rem, 4.5vw, 4.5rem)' }}>Search All Properties</h2>
+              <div className="idx-context-label">Property Search</div>
+              <div className="idx-context-title">Live MLS Listings · Southern California</div>
             </div>
-            <a href="/listings" className="link-underline">Full Screen Search →</a>
+            <div className="idx-context-divider" />
+            <div className="idx-live-dot">Live · Updated Daily</div>
           </div>
-
-          <div className="idx-frame-wrap">
-            {/* Loading state */}
-            <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
-              <div style={{
-                fontFamily: "'Jost', sans-serif", fontWeight: 600, fontSize: '0.72rem',
-                letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--black)'
-              }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
-              <div className="idx-loader-bar"><div className="idx-loader-fill" /></div>
-              <div className="idx-loader-label">Loading Live Listings</div>
-            </div>
-
-            <iframe
-              src="https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              marginWidth="0"
-              marginHeight="0"
-              title="McQueen Realty Property Search"
-              allowFullScreen
-              className={idxLoaded ? 'loaded' : ''}
-              onLoad={() => setIdxLoaded(true)}
-            />
-          </div>
-
-          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-            <a href="/listings" className="btn-primary">
-              Open Full Property Search{' '}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="idx-context-right">
+            <span className="idx-disclaimer">Powered by CRMLS</span>
+            <a href="#contact" className="idx-contact-btn">
+              Schedule a Showing
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
               </svg>
             </a>
           </div>
         </div>
+
+        {/* Full-bleed iframe — Matrix header clipped via offset */}
+        <div className="idx-clip">
+          <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
+            <div style={{
+              fontFamily: "'Jost', sans-serif", fontWeight: 600, fontSize: '0.72rem',
+              letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--black)'
+            }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
+            <div className="idx-loader-bar"><div className="idx-loader-fill" /></div>
+            <div className="idx-loader-label">Loading Live Listings</div>
+          </div>
+          <iframe
+            src="https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c"
+            frameBorder="0"
+            title="McQueen Realty MLS Property Search"
+            allowFullScreen
+            className={idxLoaded ? 'loaded' : ''}
+            onLoad={() => setIdxLoaded(true)}
+          />
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="idx-cta-bar">
+          <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.78rem', color: 'var(--mid)', fontWeight: 300 }}>
+            Found something you love?
+          </span>
+          <a href="#contact" className="idx-contact-btn">
+            Talk to an Agent
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+
       </section>
 
       {/* ── EDITORIAL ── */}
