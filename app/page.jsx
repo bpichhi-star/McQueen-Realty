@@ -475,8 +475,6 @@ export default function Home() {
         </div>
         <div className="hero-rule anim-d2" />
       </div>
-          <div className="hero-rule anim-d2" />
-        </div>
 
         <div className="hero-scene-label anim-d5">
           <div className="hero-scene-dot" />
