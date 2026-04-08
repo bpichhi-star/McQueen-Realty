@@ -804,6 +804,36 @@ export default function Home() {
         ))}
       </div>
 
+      {/* ── EDITORIAL ── */}
+      <section style={{ background: 'var(--near-black)', padding: '6rem 2.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
+            <div>
+              <span className="sec-label">World of McQueen</span>
+              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 5vw, 5rem)', color: 'var(--white)' }}>Luxury Property<br/>&amp; Lifestyle</h2>
+            </div>
+            <a href="/journal" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', borderBottom: '1px solid rgba(255,255,255,0.12)', paddingBottom: 2 }}>View All →</a>
+          </div>
+          <div className="edit-grid">
+            {[
+              { h: 380, title: 'The New Bel Air', sub: "How LA's most storied hillside is quietly reinventing itself", bg: 'linear-gradient(145deg,#222,#111)' },
+              { h: 220, title: 'Malibu Colony Report', sub: 'Q1 2026 Market Insight', bg: 'linear-gradient(145deg,#1c2020,#111616)' },
+              { h: 220, title: 'Architecture & Privacy', sub: 'Designing for the ultra-high-net-worth buyer', bg: 'linear-gradient(145deg,#201c1c,#141010)' },
+            ].map(e => (
+              <div key={e.title} className="edit-card">
+                <div className="edit-card-img" style={{ height: e.h }}>
+                  <div className="edit-card-img-inner" style={{ background: e.bg, height: '100%' }} />
+                </div>
+                <div style={{ padding: '1.5rem 1.8rem 2rem' }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.3rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.5rem' }}>{e.title}</div>
+                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', fontWeight: 300, lineHeight: 1.6 }}>{e.sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── SEARCH ── */}
       <section className="search-section" id="search">
         <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
@@ -927,36 +957,6 @@ export default function Home() {
           </a>
         </div>
 
-      </section>
-
-      {/* ── EDITORIAL ── */}
-      <section style={{ background: 'var(--near-black)', padding: '6rem 2.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
-            <div>
-              <span className="sec-label">World of McQueen</span>
-              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 5vw, 5rem)', color: 'var(--white)' }}>Luxury Property<br/>&amp; Lifestyle</h2>
-            </div>
-            <a href="/journal" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', borderBottom: '1px solid rgba(255,255,255,0.12)', paddingBottom: 2 }}>View All →</a>
-          </div>
-          <div className="edit-grid">
-            {[
-              { h: 380, title: 'The New Bel Air', sub: "How LA's most storied hillside is quietly reinventing itself", bg: 'linear-gradient(145deg,#222,#111)' },
-              { h: 220, title: 'Malibu Colony Report', sub: 'Q1 2026 Market Insight', bg: 'linear-gradient(145deg,#1c2020,#111616)' },
-              { h: 220, title: 'Architecture & Privacy', sub: 'Designing for the ultra-high-net-worth buyer', bg: 'linear-gradient(145deg,#201c1c,#141010)' },
-            ].map(e => (
-              <div key={e.title} className="edit-card">
-                <div className="edit-card-img" style={{ height: e.h }}>
-                  <div className="edit-card-img-inner" style={{ background: e.bg, height: '100%' }} />
-                </div>
-                <div style={{ padding: '1.5rem 1.8rem 2rem' }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.3rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.5rem' }}>{e.title}</div>
-                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', fontWeight: 300, lineHeight: 1.6 }}>{e.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* ── SERVICES ── */}
