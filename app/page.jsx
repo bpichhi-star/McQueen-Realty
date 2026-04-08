@@ -605,18 +605,6 @@ export default function Home() {
         }
         .search-exclusives:hover { color: var(--gold); border-color: var(--gold); }
 
-        .stats-strip { display: flex; border-bottom: 1px solid var(--border); }
-        .stat-cell { flex: 1; padding: 2.2rem 2.5rem; }
-        .stat-cell + .stat-cell { border-left: 1px solid var(--border); }
-        .stat-val {
-          font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
-          font-size: 2.8rem; line-height: 1; color: var(--black); margin-bottom: 0.3rem;
-        }
-        .stat-label {
-          font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em;
-          text-transform: uppercase; color: var(--faint);
-        }
-
         .marquee-wrap {
           overflow: hidden; background: var(--black);
           border-bottom: 1px solid rgba(255,255,255,0.04); padding: 1rem 0;
@@ -788,21 +776,6 @@ export default function Home() {
           <div className="hero-scroll-arrow" />
         </div>
       </section>
-
-      {/* ── STATS STRIP ── */}
-      <div className="stats-strip">
-        {[
-          { val: 'EST. 2008', label: 'Established' },
-          { val: '$2B+',      label: 'Total Sales Volume' },
-          { val: '500+',      label: 'Homes Sold' },
-          { val: '98%',       label: 'Client Satisfaction' },
-        ].map(s => (
-          <div key={s.label} className="stat-cell">
-            <div className="stat-val">{s.val}</div>
-            <div className="stat-label">{s.label}</div>
-          </div>
-        ))}
-      </div>
 
       {/* ── EDITORIAL ── */}
       <section style={{ background: 'var(--near-black)', padding: '6rem 2.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
