@@ -824,8 +824,8 @@ export default function Home() {
                 city: 'Los Angeles, CA 90077',
                 stats: '5 bd  ·  4.5 ba  ·  5,210 sqft',
                 sub: 'Mid-Century Modern · Stone Canyon Reservoir Views',
-                bg: 'linear-gradient(145deg,#222,#111)',
-                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/25543939_autosearch'),
+                img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80&auto=format&fit=crop',
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/7000000_price/10000000_maxprice/home_homeType/active,short-sales,foreclosures_homeStatus/90077_autosearch'),
               },
               {
                 h: 220,
@@ -835,7 +835,7 @@ export default function Home() {
                 city: 'Malibu, CA 90265',
                 stats: '3 bd  ·  3 ba  ·  3,377 sqft',
                 sub: 'New Construction 2025',
-                bg: 'linear-gradient(145deg,#1c2020,#111616)',
+                img: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80&auto=format&fit=crop',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/25602415_autosearch'),
               },
               {
@@ -846,15 +846,21 @@ export default function Home() {
                 city: 'Hidden Hills, CA 91302',
                 stats: '7 bd  ·  10 ba  ·  13,802 sqft',
                 sub: 'Guard-Gated Estate · New Build 2024',
-                bg: 'linear-gradient(145deg,#201c1c,#141010)',
+                img: 'https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=900&q=80&auto=format&fit=crop',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/SR26011664_autosearch'),
               },
             ].map(e => (
               <a key={e.address} href={e.href} className="edit-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="edit-card-img" style={{ height: e.h, position: 'relative' }}>
-                  <div className="edit-card-img-inner" style={{ background: e.bg, height: '100%' }} />
+                  <div className="edit-card-img-inner" style={{
+                    height: '100%',
+                    backgroundImage: `url('${e.img}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%)' }} />
                   <div style={{ position: 'absolute', top: '1.2rem', left: '1.2rem', background: 'var(--gold)', color: 'var(--black)', fontFamily: "'Jost', sans-serif", fontSize: '0.54rem', letterSpacing: '0.22em', padding: '0.32rem 0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>{e.tag}</div>
-                  <div style={{ position: 'absolute', bottom: '1.2rem', right: '1.2rem', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '1.6rem', color: 'var(--white)', letterSpacing: '0.02em', lineHeight: 1 }}>{e.price}</div>
+                  <div style={{ position: 'absolute', bottom: '1.2rem', right: '1.2rem', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '1.6rem', color: 'var(--white)', letterSpacing: '0.02em', lineHeight: 1, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{e.price}</div>
                 </div>
                 <div style={{ padding: '1.4rem 1.8rem 1.8rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
