@@ -818,42 +818,56 @@ export default function Home() {
             {[
               {
                 h: 380,
-                title: 'The New Bel Air',
-                sub: 'Homes from $7,000,000 · Bel Air, CA 90077',
-                tag: 'From $7M+',
+                tag: 'Bel Air',
+                price: '$7,985,000',
+                address: '1769 Stone Canyon Road',
+                city: 'Los Angeles, CA 90077',
+                stats: '5 bd  ·  4.5 ba  ·  5,210 sqft',
+                sub: 'Mid-Century Modern · Stone Canyon Reservoir Views',
                 bg: 'linear-gradient(145deg,#222,#111)',
-                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/7000000_price/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus/90077_autosearch'),
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/25543939_autosearch'),
               },
               {
                 h: 220,
-                title: 'Malibu Colony',
-                sub: 'Homes from $5,000,000 · Malibu, CA 90265',
-                tag: 'From $5M+',
+                tag: 'Malibu',
+                price: '$5,100,000',
+                address: '5416 Horizon Drive',
+                city: 'Malibu, CA 90265',
+                stats: '3 bd  ·  3 ba  ·  3,377 sqft',
+                sub: 'New Construction 2025',
                 bg: 'linear-gradient(145deg,#1c2020,#111616)',
-                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/5000000_price/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus/90265_autosearch'),
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/25602415_autosearch'),
               },
               {
                 h: 220,
-                title: 'Hidden Hills',
-                sub: 'Homes from $6,000,000 · Hidden Hills, CA 91301',
-                tag: 'From $6M+',
+                tag: 'Hidden Hills',
+                price: '$18,800,000',
+                address: '5373 Jed Smith Road',
+                city: 'Hidden Hills, CA 91302',
+                stats: '7 bd  ·  10 ba  ·  13,802 sqft',
+                sub: 'Guard-Gated Estate · New Build 2024',
                 bg: 'linear-gradient(145deg,#201c1c,#141010)',
-                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/6000000_price/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus/91301_autosearch'),
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/SR26011664_autosearch'),
               },
             ].map(e => (
-              <a key={e.title} href={e.href} className="edit-card" style={{ textDecoration: 'none', display: 'block' }}>
+              <a key={e.address} href={e.href} className="edit-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="edit-card-img" style={{ height: e.h, position: 'relative' }}>
                   <div className="edit-card-img-inner" style={{ background: e.bg, height: '100%' }} />
                   <div style={{ position: 'absolute', top: '1.2rem', left: '1.2rem', background: 'var(--gold)', color: 'var(--black)', fontFamily: "'Jost', sans-serif", fontSize: '0.54rem', letterSpacing: '0.22em', padding: '0.32rem 0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>{e.tag}</div>
+                  <div style={{ position: 'absolute', bottom: '1.2rem', right: '1.2rem', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '1.6rem', color: 'var(--white)', letterSpacing: '0.02em', lineHeight: 1 }}>{e.price}</div>
                 </div>
-                <div style={{ padding: '1.5rem 1.8rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                  <div>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.3rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.5rem' }}>{e.title}</div>
-                    <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', fontWeight: 300, lineHeight: 1.6 }}>{e.sub}</div>
+                <div style={{ padding: '1.4rem 1.8rem 1.8rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div>
+                      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.15rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.2rem' }}>{e.address}</div>
+                      <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.63rem', color: 'rgba(255,255,255,0.35)', fontWeight: 300, letterSpacing: '0.06em' }}>{e.city}</div>
+                    </div>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: '1rem', marginTop: '0.2rem' }}>
+                      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
                   </div>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: '1rem' }}>
-                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                  </svg>
+                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.65rem', color: 'var(--gold)', fontWeight: 400, letterSpacing: '0.08em', marginBottom: '0.3rem' }}>{e.stats}</div>
+                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.63rem', color: 'rgba(255,255,255,0.28)', fontWeight: 300, lineHeight: 1.5 }}>{e.sub}</div>
                 </div>
               </a>
             ))}
