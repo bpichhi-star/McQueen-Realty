@@ -1,643 +1,1085 @@
 'use client';
+import { useEffect, useRef, useState } from 'react';
 
-import { useState, useEffect, useRef } from 'react';
-
-/* ─── VIDEO HERO ─────────────────────────────────────────── */
-const scenes = [
+const VIDEOS = [
   {
-    src: 'https://videos.pexels.com/video-files/2169880/2169880-uhd_2560_1440_30fps.mp4',
+    src: 'https://pub-ad56d343e8ab4bbaa42e4b8b7cc3847b.r2.dev/hero1.mp4',
+    poster: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1800&q=80&auto=format',
     label: 'Los Angeles',
   },
   {
-    src: 'https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_25fps.mp4',
+    src: 'https://pub-ad56d343e8ab4bbaa42e4b8b7cc3847b.r2.dev/hero2.mp4',
+    poster: 'https://images.unsplash.com/photo-1420745981456-b95fe23f5753?w=1800&q=80',
     label: 'Malibu',
   },
   {
-    src: 'https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_25fps.mp4',
+    src: 'https://pub-ad56d343e8ab4bbaa42e4b8b7cc3847b.r2.dev/hero3.mp4',
+    poster: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=1800&q=80',
     label: 'Santa Monica',
   },
   {
-    src: 'https://videos.pexels.com/video-files/3214083/3214083-uhd_2560_1440_25fps.mp4',
+    src: 'https://pub-ad56d343e8ab4bbaa42e4b8b7cc3847b.r2.dev/hero3.mp4',
+    poster: 'https://images.unsplash.com/photo-1543328023-cd0b8ff72739?w=1800&q=80',
     label: 'Beverly Hills',
   },
 ];
 
-function VideoHero() {
-  const [current, setCurrent] = useState(0);
-  const [fading, setFading] = useState(false);
+export default function Home() {
+  const [active, setActive] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [overVideo, setOverVideo] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  // Compass-style search state
+  const [searchTab, setSearchTab] = useState('buy');
+  const [beds, setBeds] = useState('');
+  const [baths, setBaths] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [homeTypes, setHomeTypes] = useState([]);
+  const [openFilter, setOpenFilter] = useState(null);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [idxLoaded, setIdxLoaded] = useState(false);
+  const searchPanelRef = useRef(null);
+  const videoRefs = useRef([]);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setFading(true);
-      setTimeout(() => {
-        setCurrent(prev => (prev + 1) % scenes.length);
-        setFading(false);
-      }, 800);
-    }, 7000);
-    return () => clearInterval(intervalRef.current);
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 10);
+      setOverVideo(y < window.innerHeight * 0.8);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const scrollToContact = () => {
-    document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  return (
-    <section style={{ position: 'relative', height: '100vh', overflow: 'hidden', background: '#0a0a0a' }}>
-      {/* Videos */}
-      {scenes.map((scene, i) => (
-        <video
-          key={scene.src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'cover',
-            opacity: i === current ? (fading ? 0 : 0.55) : 0,
-            transition: 'opacity 0.8s ease',
-            zIndex: 1,
-          }}
-          src={scene.src}
-        />
-      ))}
-
-      {/* Overlay */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 2,
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%)',
-      }} />
-
-      {/* Location label */}
-      <div style={{
-        position: 'absolute', bottom: 80, left: 60, zIndex: 10,
-        display: 'flex', alignItems: 'center', gap: 8,
-      }}>
-        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C9A84C', display: 'inline-block' }} />
-        <span style={{ color: '#C9A84C', fontFamily: '"Cormorant Garamond", serif', fontSize: 13, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-          {scenes[current].label}
-        </span>
-      </div>
-
-      {/* Progress dots */}
-      <div style={{ position: 'absolute', bottom: 80, right: 60, zIndex: 10, display: 'flex', gap: 8 }}>
-        {scenes.map((_, i) => (
-          <div key={i} style={{
-            width: i === current ? 20 : 6, height: 6, borderRadius: 3,
-            background: i === current ? '#C9A84C' : 'rgba(255,255,255,0.3)',
-            transition: 'all 0.4s ease',
-          }} />
-        ))}
-      </div>
-
-      {/* Hero copy */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 5,
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        textAlign: 'center', padding: '0 24px',
-      }}>
-        <p style={{ color: '#C9A84C', fontFamily: '"Cormorant Garamond", serif', fontSize: 13, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 20 }}>
-          Luxury Real Estate
-        </p>
-        <h1 style={{
-          fontFamily: '"Cormorant Garamond", serif', fontWeight: 300,
-          fontSize: 'clamp(52px, 8vw, 100px)', color: '#fff',
-          lineHeight: 1.05, letterSpacing: '-0.02em', margin: '0 0 8px',
-        }}>
-          McQueen Realty
-        </h1>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontFamily: '"Cormorant Garamond", serif', fontSize: 'clamp(16px, 2vw, 22px)', fontStyle: 'italic', marginBottom: 48 }}>
-          Southern California's Premier Luxury Brokerage
-        </p>
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <a href="/buy" style={{
-            padding: '14px 36px', background: '#C9A84C', color: '#0a0a0a',
-            fontFamily: '"Cormorant Garamond", serif', fontSize: 15, fontWeight: 600,
-            letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none',
-            transition: 'background 0.3s',
-          }}>
-            Buy
-          </a>
-          <a href="/sell" style={{
-            padding: '14px 36px', background: 'transparent', color: '#fff',
-            border: '1px solid rgba(255,255,255,0.5)',
-            fontFamily: '"Cormorant Garamond", serif', fontSize: 15, fontWeight: 600,
-            letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none',
-            transition: 'all 0.3s',
-          }}>
-            Sell
-          </a>
-          <button onClick={scrollToContact} style={{
-            padding: '14px 36px', background: 'transparent', color: '#C9A84C',
-            border: '1px solid #C9A84C',
-            fontFamily: '"Cormorant Garamond", serif', fontSize: 15, fontWeight: 600,
-            letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer',
-            transition: 'all 0.3s',
-          }}>
-            Schedule Showing
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── NAVBAR ─────────────────────────────────────────────── */
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
+    // Play the active video
+    videoRefs.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === active) {
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+        v.currentTime = 0;
+      }
+    });
+
+    // Rotate every 7s
+    intervalRef.current = setInterval(() => {
+      setActive((prev) => (prev + 1) % VIDEOS.length);
+    }, 7000);
+
+    return () => clearInterval(intervalRef.current);
+  }, [active]);
+
+  // Neighborhood → ZIP lookup for ApexIDX
+  const NEIGHBORHOOD_ZIPS = {
+    'beverly hills': '90210', 'bel air': '90077', 'malibu': '90265',
+    'santa monica': '90401', 'pacific palisades': '90272', 'brentwood': '90049',
+    'hollywood hills': '90046', 'west hollywood': '90046', 'calabasas': '91302',
+    'hidden hills': '91301', 'holmby hills': '90024', 'westwood': '90024',
+    'los feliz': '90027', 'silver lake': '90026', 'studio city': '91604',
+    'sherman oaks': '91403', 'encino': '91316', 'woodland hills': '91364',
+    'hancock park': '90004', 'los angeles': '90001', 'west la': '90025',
+    'culver city': '90232', 'marina del rey': '90292', 'playa del rey': '90293',
+    'manhattan beach': '90266', 'hermosa beach': '90254', 'redondo beach': '90277',
+    'palos verdes': '90274', 'san marino': '91108', 'pasadena': '91101',
+    'glendale': '91201', 'burbank': '91501', 'tarzana': '91356',
+    'northridge': '91324', 'chatsworth': '91311', 'porter ranch': '91326',
+  };
+
+  const buildApexUrl = () => {
+    const q = searchQuery.trim().toLowerCase();
+    let locationSegment = '';
+
+    // Check if it's a ZIP code (5 digits)
+    if (/^\d{5}$/.test(q)) {
+      locationSegment = `${q}_autosearch`;
+    } else if (q && NEIGHBORHOOD_ZIPS[q]) {
+      // Known neighborhood → use its ZIP
+      locationSegment = `${NEIGHBORHOOD_ZIPS[q]}_autosearch`;
+    } else if (q) {
+      // Unknown — try as-is in autosearch (ApexIDX may handle it)
+      locationSegment = `${encodeURIComponent(q)}_autosearch`;
+    }
+
+    // Property types
+    const typeMap = { 'House': 'home', 'Condo': 'Condo', 'Townhouse': 'Townhouse', 'Multi-Family': 'MultiFamily', 'Land': 'Land' };
+    const types = homeTypes.length > 0
+      ? homeTypes.map(t => typeMap[t] || t).join(',')
+      : 'home,Townhouse';
+
+    // Build URL segments
+    const segments = [
+      'lastModified_orderBy',
+      'desc_order',
+      priceRange.min ? `${priceRange.min}_price` : null,
+      priceRange.max ? `${priceRange.max}_maxprice` : null,
+      beds ? `${beds.replace('+','')}_br` : null,
+      `${types}_homeType`,
+      'active,short-sales,foreclosures_homeStatus',
+      locationSegment || null,
+    ].filter(Boolean).join('/');
+
+    return `https://apexidx.com/idx_lite/results/EN_LA/${segments}`;
+  };
+
+  const handleSearch = () => {
+    const apexUrl = buildApexUrl();
+    const encoded = encodeURIComponent(apexUrl);
+    window.location.href = `/search?src=${encoded}`;
+  };
+
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (searchPanelRef.current && !searchPanelRef.current.contains(e.target)) {
+        setOpenFilter(null);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
-  const scrollToContact = () => {
-    document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
+  const handleGeolocate = () => {
+    if (!navigator.geolocation) return;
+    setGeoLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await res.json();
+          const city =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.suburb ||
+            data.address?.county ||
+            '';
+          const state = data.address?.state_code || data.address?.state || '';
+          if (city) setSearchQuery(state ? `${city}, ${state}` : city);
+        } catch {
+          // silently fail — user still sees their location coordinates
+        } finally {
+          setGeoLoading(false);
+        }
+      },
+      () => setGeoLoading(false),
+      { timeout: 8000 }
+    );
   };
 
-  return (
-    <nav style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-      padding: '0 40px',
-      height: 72,
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      background: scrolled ? 'rgba(10,10,10,0.96)' : 'transparent',
-      backdropFilter: scrolled ? 'blur(12px)' : 'none',
-      borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : 'none',
-      transition: 'all 0.4s ease',
-    }}>
-      {/* Logo */}
-      <a href="/" style={{ textDecoration: 'none' }}>
-        <span style={{
-          fontFamily: '"Cormorant Garamond", serif',
-          fontSize: 26,
-          fontWeight: 600,
-          color: '#C9A84C',
-          letterSpacing: '0.05em',
-        }}>
-          McQueen Realty
-        </span>
-      </a>
+  const navClass = overVideo
+    ? 'nav-wrap over-video'
+    : scrolled
+    ? 'nav-wrap scrolled-light'
+    : 'nav-wrap';
 
-      {/* Center nav links */}
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        {[
-          { label: 'Buy', href: '/buy' },
-          { label: 'Sell', href: '/sell' },
-          { label: 'About Us', href: '/about' },
-        ].map(item => (
-          <a key={item.label} href={item.href} style={{
-            color: '#fff',
-            fontFamily: '"Cormorant Garamond", serif',
-            fontSize: 18,
-            fontWeight: 500,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            textDecoration: 'none',
-            padding: '6px 14px',
-            transition: 'color 0.3s',
-          }}
-            onMouseEnter={e => e.target.style.color = '#C9A84C'}
-            onMouseLeave={e => e.target.style.color = '#fff'}
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=Jost:wght@300;400;500;600&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+          --black:       #000000;
+          --near-black:  #0D0D0D;
+          --white:       #FFFFFF;
+          --off-white:   #F2F2F2;
+          --light-gray:  #E8E8E8;
+          --mid:         #5C5C5C;
+          --faint:       #999999;
+          --border:      #D8D8D8;
+          --gold:        #C4A35A;
+          --gold-dark:   #A8883E;
+          --gold-light:  #D4B57A;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+          background: var(--white);
+          color: var(--black);
+          font-family: 'Jost', sans-serif;
+          -webkit-font-smoothing: antialiased;
+          overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: 'Jost', sans-serif; }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        @keyframes scrollPulse {
+          0%, 100% { opacity: 0.3; transform: translateY(0); }
+          50%       { opacity: 1;   transform: translateY(6px); }
+        }
+
+        .anim-fadeIn { animation: fadeIn 1.4s ease both; }
+        .anim-d1     { animation: fadeUp 1s cubic-bezier(.16,1,.3,1) 0.4s both; }
+        .anim-d2     { animation: fadeUp 1s cubic-bezier(.16,1,.3,1) 0.65s both; }
+        .anim-d3     { animation: fadeUp 1s cubic-bezier(.16,1,.3,1) 0.85s both; }
+        .anim-d4     { animation: fadeUp 1s cubic-bezier(.16,1,.3,1) 1.05s both; }
+        .anim-d5     { animation: fadeIn 1s ease 1.4s both; }
+
+        .nav-wrap {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+          transition: background 0.5s, border-color 0.5s, backdrop-filter 0.5s;
+          border-bottom: 1px solid transparent;
+        }
+        .nav-wrap.over-video { background: transparent; }
+        .nav-wrap.scrolled-dark {
+          background: rgba(0,0,0,0.85);
+          backdrop-filter: blur(20px);
+          border-bottom-color: rgba(255,255,255,0.07);
+        }
+        .nav-wrap.scrolled-light {
+          background: rgba(255,255,255,0.97);
+          backdrop-filter: blur(20px);
+          border-bottom-color: var(--border);
+        }
+
+        .nav-inner { display: flex; align-items: stretch; height: 68px; padding: 0 2.5rem; }
+
+        .nav-logo {
+          display: flex; align-items: center; padding-right: 3rem;
+          font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.76rem;
+          letter-spacing: 0.3em; text-transform: uppercase;
+          transition: color 0.4s; white-space: nowrap; flex-shrink: 0;
+        }
+        .nav-logo .sep { color: var(--gold); margin: 0 0.15em; font-weight: 300; }
+
+        .nav-links { display: flex; align-items: stretch; flex: 1; }
+
+        .nav-link {
+          display: flex; align-items: center; padding: 0 1.3rem;
+          font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+          font-weight: 400; transition: color 0.2s; position: relative; white-space: nowrap;
+        }
+        .nav-link::after {
+          content: ''; position: absolute; bottom: 0;
+          left: 1.3rem; right: 1.3rem; height: 2px;
+          background: var(--gold); transform: scaleX(0);
+          transition: transform 0.25s ease;
+        }
+        .nav-link:hover::after { transform: scaleX(1); }
+
+        .nav-right { display: flex; align-items: center; gap: 1.2rem; margin-left: auto; }
+
+        .nav-cta {
+          display: flex; align-items: center; height: 36px; padding: 0 1.4rem;
+          background: var(--gold); color: var(--white) !important;
+          font-size: 0.67rem; letter-spacing: 0.12em; font-weight: 500;
+          text-transform: uppercase; transition: background 0.2s; flex-shrink: 0;
+        }
+        .nav-cta:hover { background: var(--gold-dark); }
+
+        .hero-video-wrap {
+          position: relative; width: 100%; height: 100vh; min-height: 700px;
+          overflow: hidden; background: #000;
+        }
+
+        .hero-video {
+          position: absolute; inset: 0; width: 100%; height: 100%;
+          object-fit: cover; object-position: center;
+          transition: opacity 1.2s ease;
+        }
+        .hero-video.active  { opacity: 1; }
+        .hero-video.inactive { opacity: 0; }
+
+        .hero-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(0,0,0,0.30) 0%,
+            rgba(0,0,0,0.15) 35%,
+            rgba(0,0,0,0.50) 70%,
+            rgba(0,0,0,0.88) 100%
+          );
+        }
+
+        .hero-center {
+          position: absolute; inset: 0;
+          display: flex; flex-direction: column;
+          align-items: flex-start; justify-content: center;
+          padding: 0 2.5rem;
+        }
+
+
+        .hero-dots { position: absolute; bottom: 3.7rem; right: 2.5rem; display: flex; gap: 0.5rem; }
+        .hero-dot { width: 18px; height: 2px; background: rgba(255,255,255,0.25); transition: background 0.4s, width 0.4s; }
+        .hero-dot.active-dot { background: var(--gold); width: 32px; }
+
+        .hero-wordmark {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+          font-size: clamp(4rem, 10vw, 11rem); letter-spacing: -0.01em;
+          text-transform: uppercase; color: var(--white); line-height: 0.9;
+        }
+        .hero-wordmark .brand-sub {
+          display: block; font-family: 'Jost', sans-serif; font-weight: 300;
+          font-size: clamp(0.7rem, 1.5vw, 1rem); letter-spacing: 0.5em;
+          color: var(--gold); margin-top: 0.8rem; text-transform: uppercase;
+        }
+        .hero-wordmark strong { font-weight: 900; }
+
+
+        .hero-scroll {
+          position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+          display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+        }
+        .hero-scroll span {
+          font-family: 'Jost', sans-serif; font-size: 0.55rem; letter-spacing: 0.3em;
+          text-transform: uppercase; color: rgba(255,255,255,0.35);
+        }
+        .hero-scroll-arrow {
+          width: 16px; height: 16px;
+          border-right: 1px solid rgba(255,255,255,0.3);
+          border-bottom: 1px solid rgba(255,255,255,0.3);
+          transform: rotate(45deg);
+          animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        /* ── SEARCH SECTION SHELL ── */
+        .search-section {
+          position: relative; background: var(--near-black); padding: 6rem 2.5rem 7rem;
+          border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden;
+        }
+        .search-bg {
+          position: absolute; inset: 0; background-size: cover;
+          background-position: center 30%; opacity: 0.18; transition: opacity 0.6s;
+        }
+        .search-content { position: relative; z-index: 2; }
+
+        .search-headline {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: italic;
+          font-size: clamp(3.5rem, 8vw, 9rem); line-height: 0.88; letter-spacing: -0.01em;
+          text-transform: uppercase; color: var(--white); margin-bottom: 1.2rem;
+        }
+        .search-sub {
+          font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 300;
+          letter-spacing: 0.08em; color: rgba(255,255,255,0.42); margin-bottom: 2.5rem;
+        }
+
+        .csearch-geo-btn {
+          display: flex; align-items: center; justify-content: center;
+          width: 34px; height: 34px; background: transparent;
+          border: 1px solid var(--border); cursor: pointer; flex-shrink: 0;
+          color: var(--faint); transition: border-color 0.15s, color 0.15s;
+        }
+        .csearch-geo-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .csearch-geo-btn.spinning svg { animation: spinOnce 0.8s ease both; }
+        @keyframes spinOnce {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+
+        /* ── IDX FULL-BLEED ── */
+        .idx-section {
+          position: relative;
+          background: var(--white);
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+        }
+
+        /* Branded context bar above the iframe */
+        .idx-context-bar {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 1.4rem 2.5rem;
+          border-bottom: 1px solid var(--border);
+          background: var(--white);
+        }
+        .idx-context-left {
+          display: flex; align-items: center; gap: 1.6rem;
+        }
+        .idx-context-label {
+          font-family: 'Jost', sans-serif; font-size: 0.58rem;
+          letter-spacing: 0.24em; text-transform: uppercase;
+          color: var(--faint); font-weight: 500;
+        }
+        .idx-context-title {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+          font-size: 1.1rem; text-transform: uppercase;
+          letter-spacing: 0.04em; color: var(--black);
+        }
+        .idx-context-divider {
+          width: 1px; height: 24px; background: var(--border);
+        }
+        .idx-live-dot {
+          display: flex; align-items: center; gap: 6px;
+          font-family: 'Jost', sans-serif; font-size: 0.62rem;
+          letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint);
+        }
+        .idx-live-dot::before {
+          content: ''; width: 6px; height: 6px; border-radius: 50%;
+          background: #4CAF50;
+          box-shadow: 0 0 0 2px rgba(76,175,80,0.2);
+          animation: livePulse 2s ease infinite;
+        }
+        @keyframes livePulse {
+          0%, 100% { box-shadow: 0 0 0 2px rgba(76,175,80,0.2); }
+          50%       { box-shadow: 0 0 0 5px rgba(76,175,80,0); }
+        }
+        .idx-context-right {
+          display: flex; align-items: center; gap: 1.4rem;
+        }
+        .idx-contact-btn {
+          display: flex; align-items: center; gap: 6px;
+          height: 36px; padding: 0 1.4rem;
+          background: var(--black); color: var(--white); border: none;
+          font-family: 'Jost', sans-serif; font-size: 0.67rem;
+          letter-spacing: 0.12em; font-weight: 500; text-transform: uppercase;
+          cursor: pointer; transition: background 0.2s; text-decoration: none;
+        }
+        .idx-contact-btn:hover { background: var(--gold); }
+        .idx-disclaimer {
+          font-family: 'Jost', sans-serif; font-size: 0.6rem;
+          color: var(--faint); letter-spacing: 0.04em;
+        }
+
+        /* The clipping wrapper — hides Matrix chrome */
+        .idx-clip {
+          position: relative;
+          overflow: hidden;
+          height: 820px;
+          background: var(--white);
+        }
+
+        /* Loader overlay */
+        .idx-loader {
+          position: absolute; inset: 0;
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          background: var(--white); z-index: 10;
+          gap: 1.2rem;
+          transition: opacity 0.6s ease;
+          pointer-events: none;
+        }
+        .idx-loader.hidden { opacity: 0; }
+        .idx-loader-bar {
+          width: 120px; height: 1px; background: var(--light-gray); overflow: hidden;
+        }
+        .idx-loader-fill {
+          height: 100%; background: var(--gold);
+          animation: idxLoad 1.8s cubic-bezier(.4,0,.2,1) infinite;
+        }
+        @keyframes idxLoad {
+          0%   { width: 0%;  margin-left: 0; }
+          50%  { width: 60%; margin-left: 20%; }
+          100% { width: 0%;  margin-left: 100%; }
+        }
+        .idx-loader-label {
+          font-family: 'Jost', sans-serif; font-size: 0.58rem;
+          letter-spacing: 0.28em; text-transform: uppercase; color: var(--faint);
+        }
+
+        /* The iframe itself — offset upward to clip Matrix header */
+        .idx-clip iframe {
+          position: absolute;
+          top: -82px; left: 0;
+          width: 100%;
+          height: calc(100% + 82px);
+          border: none;
+          opacity: 0;
+          transition: opacity 0.7s ease;
+        }
+        .idx-clip iframe.loaded { opacity: 1; }
+
+        /* Bottom CTA bar */
+        .idx-cta-bar {
+          display: flex; align-items: center; justify-content: center;
+          gap: 2rem; padding: 1.8rem 2.5rem;
+          border-top: 1px solid var(--border);
+          background: var(--off-white);
+        }
+
+        .csearch-panel {
+          background: var(--white);
+          max-width: 820px;
+          box-shadow: 0 20px 80px rgba(0,0,0,0.45);
+        }
+
+        /* Tabs */
+        .csearch-tabs {
+          display: flex; border-bottom: 1px solid var(--border); padding: 0 1.5rem;
+        }
+        .csearch-tab {
+          padding: 0.85rem 1.1rem; background: transparent; border: none;
+          border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer;
+          font-family: 'Jost', sans-serif; font-size: 0.7rem; font-weight: 500;
+          letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint);
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .csearch-tab.tab-active { color: var(--black); border-bottom-color: var(--gold); }
+
+        /* Input row */
+        .csearch-input-row {
+          display: flex; align-items: center; padding: 0 1.5rem;
+          height: 62px; border-bottom: 1px solid var(--border); gap: 0.8rem;
+        }
+        .csearch-input {
+          flex: 1; background: transparent; border: none; outline: none;
+          font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 300;
+          color: var(--black); letter-spacing: 0.02em;
+        }
+        .csearch-input::placeholder { color: var(--faint); }
+        .csearch-divider { width: 1px; height: 26px; background: var(--border); flex-shrink: 0; }
+        .csearch-search-btn {
+          display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 1.4rem;
+          background: var(--black); color: var(--white); border: none; cursor: pointer;
+          font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.14em;
+          font-weight: 500; text-transform: uppercase; flex-shrink: 0;
+          transition: background 0.2s;
+        }
+        .csearch-search-btn:hover { background: var(--gold); }
+
+        /* Filter pills row */
+        .csearch-filters {
+          display: flex; align-items: center; padding: 0 1.5rem;
+          height: 50px; gap: 6px; overflow-x: auto;
+        }
+        .csearch-filters::-webkit-scrollbar { display: none; }
+        .csearch-pill {
+          display: flex; align-items: center; gap: 4px; height: 30px; padding: 0 11px;
+          background: transparent; border: 1px solid var(--border); color: var(--black);
+          font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.04em;
+          font-weight: 400; white-space: nowrap; cursor: pointer; position: relative;
+          transition: border-color 0.15s, background 0.15s, color 0.15s;
+        }
+        .csearch-pill:hover { border-color: var(--black); }
+        .csearch-pill.pill-active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+        /* Dropdowns */
+        .csearch-dropdown {
+          position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px;
+          background: var(--white); border: 1px solid var(--border);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.14); z-index: 600; padding: 1.2rem 1.4rem 1.4rem;
+        }
+        .csearch-dd-label {
+          font-family: 'Jost', sans-serif; font-size: 0.55rem; letter-spacing: 0.2em;
+          text-transform: uppercase; color: var(--faint); margin-bottom: 0.7rem; display: block;
+        }
+        .csearch-opt-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        .csearch-opt {
+          padding: 4px 11px; border: 1px solid var(--border); background: transparent;
+          color: var(--black); font-family: 'Jost', sans-serif; font-size: 0.68rem;
+          cursor: pointer; transition: all 0.12s;
+        }
+        .csearch-opt:hover { border-color: var(--black); }
+        .csearch-opt.opt-sel { background: var(--black); color: var(--white); border-color: var(--black); }
+        .csearch-price-inputs { display: flex; gap: 8px; align-items: center; margin-top: 0.8rem; }
+        .csearch-price-inp {
+          flex: 1; height: 34px; padding: 0 10px; border: 1px solid var(--border); outline: none;
+          font-family: 'Jost', sans-serif; font-size: 0.75rem; color: var(--black); background: transparent;
+        }
+        .csearch-price-inp:focus { border-color: var(--black); }
+        .csearch-dd-apply {
+          display: flex; justify-content: flex-end; margin-top: 1rem;
+        }
+        .csearch-dd-apply button {
+          height: 32px; padding: 0 16px; background: var(--black); color: var(--white); border: none;
+          cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.62rem;
+          letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+          transition: background 0.2s;
+        }
+        .csearch-dd-apply button:hover { background: var(--gold); }
+
+        /* Exclusives link below panel */
+        .search-exclusives {
+          display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 1.8rem;
+          font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.16em;
+          text-transform: uppercase; color: rgba(255,255,255,0.35);
+          border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 2px;
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .search-exclusives:hover { color: var(--gold); border-color: var(--gold); }
+
+        .stats-strip { display: flex; border-bottom: 1px solid var(--border); }
+        .stat-cell { flex: 1; padding: 2.2rem 2.5rem; }
+        .stat-cell + .stat-cell { border-left: 1px solid var(--border); }
+        .stat-val {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+          font-size: 2.8rem; line-height: 1; color: var(--black); margin-bottom: 0.3rem;
+        }
+        .stat-label {
+          font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em;
+          text-transform: uppercase; color: var(--faint);
+        }
+
+        .marquee-wrap {
+          overflow: hidden; background: var(--black);
+          border-bottom: 1px solid rgba(255,255,255,0.04); padding: 1rem 0;
+        }
+        .marquee-track {
+          display: flex; gap: 0; width: max-content;
+          animation: marquee 30s linear infinite;
+        }
+        .marquee-item {
+          display: flex; align-items: center; gap: 1.8rem; padding: 0 2rem;
+          white-space: nowrap; font-family: 'Barlow Condensed', sans-serif;
+          font-weight: 700; font-size: 0.95rem; letter-spacing: 0.18em;
+          text-transform: uppercase; transition: color 0.2s;
+        }
+        .marquee-dot { color: rgba(255,255,255,0.15); font-size: 0.45rem; }
+
+        .listings-grid {
+          display: grid; grid-template-columns: 2fr 1fr 1fr;
+          gap: 1px; background: var(--border);
+        }
+        .prop-card { background: var(--white); cursor: pointer; }
+        .prop-card-img { overflow: hidden; position: relative; }
+        .prop-card-img-inner { width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(.16,1,.3,1); }
+        .prop-card:hover .prop-card-img-inner { transform: scale(1.05); }
+        .prop-tag {
+          position: absolute; top: 1.2rem; left: 1.2rem;
+          background: var(--black); color: var(--gold);
+          font-family: 'Jost', sans-serif; font-size: 0.54rem; letter-spacing: 0.22em;
+          padding: 0.32rem 0.75rem; text-transform: uppercase; font-weight: 500;
+        }
+        .prop-body { padding: 1.6rem 1.8rem 2rem; }
+        .prop-address {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.35rem;
+          text-transform: uppercase; letter-spacing: 0.02em; color: var(--black);
+          line-height: 1.1; margin-bottom: 0.25rem;
+        }
+        .prop-city {
+          font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.12em;
+          text-transform: uppercase; color: var(--faint); margin-bottom: 1.1rem;
+        }
+        .prop-stats { display: flex; gap: 1.4rem; margin-bottom: 1.2rem; }
+        .prop-stat { font-family: 'Jost', sans-serif; font-size: 0.7rem; color: var(--mid); }
+        .prop-price { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--black); }
+
+        .sec-label {
+          font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.28em;
+          text-transform: uppercase; color: var(--gold); font-weight: 500;
+          display: block; margin-bottom: 1rem;
+        }
+        .sec-h2 {
+          font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+          text-transform: uppercase; line-height: 0.9; letter-spacing: -0.01em;
+        }
+
+        .edit-grid {
+          display: grid; grid-template-columns: 1.6fr 1fr 1fr;
+          gap: 1px; background: rgba(255,255,255,0.06);
+        }
+        .edit-card { cursor: pointer; background: var(--near-black); }
+        .edit-card-img { overflow: hidden; }
+        .edit-card-img-inner { width: 100%; height: 100%; transition: transform 0.65s cubic-bezier(.16,1,.3,1); }
+        .edit-card:hover .edit-card-img-inner { transform: scale(1.05); }
+
+        .about-grid {
+          display: grid; grid-template-columns: 1fr 1fr;
+          min-height: 600px; border-bottom: 1px solid var(--border);
+        }
+
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+
+        .field-wrap { border-bottom: 1px solid var(--border); padding: 1.2rem 0; }
+        .field-label {
+          display: block; font-size: 0.58rem; letter-spacing: 0.22em;
+          text-transform: uppercase; color: var(--faint); margin-bottom: 0.4rem;
+        }
+        .field-input, .field-textarea {
+          width: 100%; background: transparent; border: none; outline: none;
+          font-family: 'Jost', sans-serif; font-size: 0.95rem; color: var(--black);
+        }
+        .field-textarea { resize: none; }
+
+        .btn-primary {
+          display: inline-flex; align-items: center; gap: 0.7rem;
+          background: var(--black); color: var(--white);
+          padding: 1rem 2.4rem; font-family: 'Jost', sans-serif;
+          font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+          font-weight: 500; border: none; transition: background 0.2s; cursor: pointer;
+        }
+        .btn-primary:hover { background: var(--gold); }
+
+        .link-underline {
+          font-family: 'Jost', sans-serif; font-size: 0.7rem; letter-spacing: 0.14em;
+          text-transform: uppercase; color: var(--mid);
+          border-bottom: 1px solid var(--border); padding-bottom: 2px;
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .link-underline:hover { color: var(--gold); border-color: var(--gold); }
+
+        .link-gold {
+          font-family: 'Jost', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em;
+          text-transform: uppercase; color: var(--gold);
+          border-bottom: 1px solid var(--gold); padding-bottom: 2px; font-weight: 500;
+          display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;
+        }
+        .link-gold:hover { color: var(--gold-dark); }
+      `}</style>
+
+      {/* ── NAV ── */}
+      <nav className={navClass}>
+        <div className="nav-inner">
+          <div className="nav-logo" style={{ color: overVideo ? '#ffffff' : 'var(--black)' }}>
+            McQueen<span className="sep">·</span>Realty
+          </div>
+          <div className="nav-links">
+            {['Buy','Rent','Sell','Agents'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} className="nav-link"
+                style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)' }}>{l}</a>
+            ))}
+          </div>
+          <div className="nav-right">
+            <a href="#listings" className="nav-link"
+              style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)', padding: '0 0.8rem' }}>New Listings</a>
+            <a href="#listings" className="nav-link"
+              style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)', padding: '0 0.8rem' }}>Exclusives</a>
+            <a href="#contact" className="nav-cta">Schedule Showing</a>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── HERO ── */}
+      <section className="hero-video-wrap">
+        {VIDEOS.map((v, i) => (
+          <video
+            key={i}
+            ref={el => videoRefs.current[i] = el}
+            className={`hero-video ${i === active ? 'active' : 'inactive'}`}
+            muted
+            loop
+            playsInline
+            poster={v.poster}
           >
-            {item.label}
-          </a>
+            <source src={v.src} type="video/mp4" />
+          </video>
         ))}
+
+        <div className="hero-overlay anim-fadeIn" />
+
+<div className="hero-center">
+        <div className="anim-d1">
+          <h1 className="search-headline" style={{ color: 'var(--white)', margin: 0 }}>Where Do<br/>You Want<br/>To Live?</h1>
+          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.85rem', fontWeight: 300, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.55)', marginTop: '1.2rem' }}>McQueen Realty. Leaders in Southern California luxury property.</p>
+        </div>
+
       </div>
 
-      {/* Right CTA */}
-      <button onClick={scrollToContact} style={{
-        padding: '10px 24px',
-        background: 'transparent',
-        border: '1px solid #C9A84C',
-        color: '#C9A84C',
-        fontFamily: '"Cormorant Garamond", serif',
-        fontSize: 14,
-        fontWeight: 600,
-        letterSpacing: '0.15em',
-        textTransform: 'uppercase',
-        cursor: 'pointer',
-        transition: 'all 0.3s',
-      }}
-        onMouseEnter={e => { e.target.style.background = '#C9A84C'; e.target.style.color = '#0a0a0a'; }}
-        onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#C9A84C'; }}
-      >
-        Schedule Showing
-      </button>
-    </nav>
-  );
-}
+        <div className="hero-dots anim-d5">
+          {VIDEOS.map((_, i) => (
+            <div
+              key={i}
+              className={`hero-dot ${i === active ? 'active-dot' : ''}`}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setActive(i)}
+            />
+          ))}
+        </div>
 
-/* ─── STATS / EST BADGE ──────────────────────────────────── */
-function StatsBar() {
-  return (
-    <div style={{ background: '#0d0d0d', borderBottom: '1px solid rgba(201,168,76,0.15)', padding: '28px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24 }}>
+        <div className="hero-scroll anim-d5">
+          <span>Scroll</span>
+          <div className="hero-scroll-arrow" />
+        </div>
+      </section>
+
+      {/* ── STATS STRIP ── */}
+      <div className="stats-strip">
         {[
-          { value: 'EST. 2008', label: 'Established' },
-          { value: '$2B+', label: 'Total Sales Volume' },
-          { value: '500+', label: 'Homes Sold' },
-          { value: '98%', label: 'Client Satisfaction' },
-        ].map(stat => (
-          <div key={stat.label} style={{ textAlign: 'center' }}>
-            <div style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 28, fontWeight: 600, color: '#C9A84C', letterSpacing: '0.05em' }}>
-              {stat.value}
-            </div>
-            <div style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 4 }}>
-              {stat.label}
-            </div>
+          { val: 'EST. 2008', label: 'Established' },
+          { val: '$2B+',      label: 'Total Sales Volume' },
+          { val: '500+',      label: 'Homes Sold' },
+          { val: '98%',       label: 'Client Satisfaction' },
+        ].map(s => (
+          <div key={s.label} className="stat-cell">
+            <div className="stat-val">{s.val}</div>
+            <div className="stat-label">{s.label}</div>
           </div>
         ))}
       </div>
-    </div>
-  );
-}
 
-/* ─── WORLD OF MCQUEEN ───────────────────────────────────── */
-function WorldOfMcQueen() {
-  return (
-    <section style={{ background: '#111', padding: '100px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* Heading */}
-        <div style={{ textAlign: 'center', marginBottom: 70 }}>
-          <p style={{ color: '#C9A84C', fontFamily: '"Cormorant Garamond", serif', fontSize: 13, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16 }}>
-            The Experience
-          </p>
-          <h2 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: 'clamp(36px, 5vw, 60px)', color: '#fff', margin: 0 }}>
-            World of McQueen
-          </h2>
-          <div style={{ width: 60, height: 1, background: '#C9A84C', margin: '24px auto 0' }} />
-        </div>
+      {/* ── SEARCH ── */}
+      <section className="search-section" id="search">
+        <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
+        <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
+          <h2 className="search-headline">Find Your<br/>Next Home</h2>
+          <p className="search-sub">Search luxury properties across Southern California</p>
 
-        {/* Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 2 }}>
-          {[
-            {
-              title: 'Buyer Representation',
-              desc: 'From initial search to closing day, we guide buyers through every step with expert market knowledge and dedicated advocacy.',
-              icon: '🏡',
-            },
-            {
-              title: 'Seller Strategy',
-              desc: 'Precision pricing, luxury marketing, and curated exposure that consistently achieves top dollar for our clients\' properties.',
-              icon: '📈',
-            },
-            {
-              title: 'Off-Market Access',
-              desc: 'Exclusive access to pocket listings and pre-market opportunities across Southern California\'s most coveted neighborhoods.',
-              icon: '🔑',
-            },
-            {
-              title: 'White Glove Service',
-              desc: 'From staging and photography to concierge referrals, every detail is handled with discretion and care.',
-              icon: '✨',
-            },
-          ].map(card => (
-            <div key={card.title} style={{
-              background: '#0d0d0d',
-              padding: '48px 36px',
-              borderTop: '2px solid #C9A84C',
-              transition: 'background 0.3s',
-            }}>
-              <div style={{ fontSize: 32, marginBottom: 20 }}>{card.icon}</div>
-              <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 22, color: '#fff', fontWeight: 500, marginBottom: 14 }}>
-                {card.title}
-              </h3>
-              <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, margin: 0 }}>
-                {card.desc}
-              </p>
+          {/* Compass Panel */}
+          <div className="csearch-panel" ref={searchPanelRef}>
+
+            {/* ── Tabs ── */}
+            <div className="csearch-tabs">
+              <button className="csearch-tab tab-active">Buy</button>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ─── HOW WE SERVE ───────────────────────────────────────── */
-function HowWeServe() {
-  const items = [
-    { title: 'Residential Sales', desc: 'Luxury single-family homes, estates, and condominiums across Southern California.' },
-    { title: 'Investment Properties', desc: 'Multi-family and income-producing assets for discerning investors.' },
-    { title: 'New Development', desc: 'Exclusive representation of new construction and developer projects.' },
-    { title: 'Relocation Services', desc: 'Seamless transitions for corporate and executive relocations.' },
-    { title: 'Leasing', desc: 'Premium lease representation for luxury residential properties.' },
-    { title: 'Market Analysis', desc: 'In-depth comparative market analysis and valuation consulting.' },
-  ];
-
-  return (
-    <section style={{ background: '#0d0d0d', padding: '100px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 70 }}>
-          <p style={{ color: '#C9A84C', fontFamily: '"Cormorant Garamond", serif', fontSize: 13, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16 }}>
-            Our Expertise
-          </p>
-          <h2 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: 'clamp(36px, 5vw, 60px)', color: '#fff', margin: 0 }}>
-            How We Serve
-          </h2>
-          <div style={{ width: 60, height: 1, background: '#C9A84C', margin: '24px auto 0' }} />
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 40 }}>
-          {items.map(item => (
-            <div key={item.title} style={{ borderLeft: '2px solid #C9A84C', paddingLeft: 24 }}>
-              <h3 style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: 22,
-                color: '#fff',
-                fontWeight: 500,
-                marginBottom: 10,
-              }}>
-                {item.title}
-              </h3>
-              <p style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: 16,
-                color: 'rgba(255,255,255,0.72)',
-                lineHeight: 1.7,
-                margin: 0,
-              }}>
-                {item.desc}
-              </p>
+            {/* ── Location Input ── */}
+            <div className="csearch-input-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" strokeWidth="2" strokeLinecap="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input
+                className="csearch-input"
+                placeholder="City, neighborhood, ZIP, or address"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+              />
+              {/* Geo button */}
+              <button
+                className={`csearch-geo-btn ${geoLoading ? 'spinning' : ''}`}
+                onClick={handleGeolocate}
+                title="Use my location"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  <circle cx="12" cy="12" r="7" strokeDasharray="2 2"/>
+                </svg>
+              </button>
+              <div className="csearch-divider" />
+              <button className="csearch-search-btn" onClick={handleSearch}>
+                Search
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ─── PROPERTY SEARCH / MLS ──────────────────────────────── */
-function PropertySearch() {
-  return (
-    <section style={{ background: '#0a0a0a', padding: '100px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 50 }}>
-          <p style={{ color: '#C9A84C', fontFamily: '"Cormorant Garamond", serif', fontSize: 13, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16 }}>
-            Live MLS Listings · Southern California
-          </p>
-          <h2 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: 'clamp(36px, 5vw, 60px)', color: '#fff', margin: 0 }}>
-            Property Search
-          </h2>
-          <div style={{ width: 60, height: 1, background: '#C9A84C', margin: '24px auto 0' }} />
+            {/* ── Filter Pills ── */}
+            <div className="csearch-filters">
+              <button className="csearch-pill" onClick={handleSearch}>
+                More Filters
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+          </div>{/* /csearch-panel */}
+
+          <a href="/search" className="search-exclusives">
+            View Our Exclusives{' '}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      {/* ── MLS SEARCH ── */}
+      <section className="idx-section" id="mls-search">
+
+        {/* Context bar — McQueen branded, sits above iframe */}
+        <div className="idx-context-bar">
+          <div className="idx-context-left">
+            <div>
+              <div className="idx-context-label">Property Search</div>
+              <div className="idx-context-title">Live MLS Listings · Southern California</div>
+            </div>
+            <div className="idx-context-divider" />
+            <div className="idx-live-dot">Live · Updated Daily</div>
+          </div>
+          <div className="idx-context-right">
+            <span className="idx-disclaimer">Powered by CRMLS</span>
+            <a href="#contact" className="idx-contact-btn">
+              Schedule a Showing
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
         </div>
 
-        <div style={{
-          width: '100%',
-          height: 700,
-          border: '1px solid rgba(201,168,76,0.2)',
-          borderRadius: 2,
-          overflow: 'hidden',
-        }}>
+        {/* ApexIDX full search — map + listings + filters */}
+        <div className="idx-clip">
+          <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
+            <div style={{
+              fontFamily: "'Jost', sans-serif", fontWeight: 600, fontSize: '0.72rem',
+              letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--black)'
+            }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
+            <div className="idx-loader-bar"><div className="idx-loader-fill" /></div>
+            <div className="idx-loader-label">Loading Live Listings</div>
+          </div>
           <iframe
-            src="https://www.crmls.org/servlet/lDisplayListings?OFFICE=01856832&LA=EN"
-            title="McQueen Realty MLS Listings"
-            width="100%"
-            height="100%"
+            src="https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus"
             frameBorder="0"
-            style={{ display: 'block' }}
+            title="McQueen Realty MLS Property Search"
+            allowFullScreen
+            className={idxLoaded ? 'loaded' : ''}
+            onLoad={() => setIdxLoaded(true)}
           />
         </div>
-      </div>
-    </section>
-  );
-}
 
-/* ─── CONTACT / COMPANY INFO ─────────────────────────────── */
-function ContactSection() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
-
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    alert('Thank you! A McQueen Realty agent will be in touch shortly.');
-    setForm({ name: '', email: '', phone: '', message: '' });
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '14px 16px',
-    background: 'rgba(255,255,255,0.08)',
-    border: '1px solid rgba(201,168,76,0.25)',
-    color: '#000',
-    fontFamily: '"Cormorant Garamond", serif',
-    fontSize: 16,
-    outline: 'none',
-    boxSizing: 'border-box',
-    transition: 'border-color 0.3s',
-    borderRadius: 0,
-  };
-
-  return (
-    <section id="contact-section" style={{ background: '#0a0a0a', padding: '100px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 70 }}>
-          <p style={{ color: '#C9A84C', fontFamily: '"Cormorant Garamond", serif', fontSize: 13, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16 }}>
-            Reach Out
-          </p>
-          <h2 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: 'clamp(36px, 5vw, 60px)', color: '#fff', margin: 0 }}>
-            Connect With Us
-          </h2>
-          <div style={{ width: 60, height: 1, background: '#C9A84C', margin: '24px auto 0' }} />
+        {/* Bottom CTA */}
+        <div className="idx-cta-bar">
+          <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.78rem', color: 'var(--mid)', fontWeight: 300 }}>
+            Found something you love?
+          </span>
+          <a href="#contact" className="idx-contact-btn">
+            Talk to an Agent
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80 }}>
-          {/* ── Left: Company Info ── */}
-          <div>
-            <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 28, color: '#C9A84C', fontWeight: 400, marginBottom: 40 }}>
-              McQueen Realty
-            </h3>
+      </section>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-              {/* Phone */}
-              <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <div style={{ width: 40, height: 40, border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="1.5">
-                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012.85 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.64a16 16 0 006.29 6.29l1.01-1.01a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
-                  </svg>
+      {/* ── EDITORIAL ── */}
+      <section style={{ background: 'var(--near-black)', padding: '6rem 2.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
+            <div>
+              <span className="sec-label">World of McQueen</span>
+              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 5vw, 5rem)', color: 'var(--white)' }}>Luxury Property<br/>&amp; Lifestyle</h2>
+            </div>
+            <a href="/journal" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', borderBottom: '1px solid rgba(255,255,255,0.12)', paddingBottom: 2 }}>View All →</a>
+          </div>
+          <div className="edit-grid">
+            {[
+              { h: 380, title: 'The New Bel Air', sub: "How LA's most storied hillside is quietly reinventing itself", bg: 'linear-gradient(145deg,#222,#111)' },
+              { h: 220, title: 'Malibu Colony Report', sub: 'Q1 2026 Market Insight', bg: 'linear-gradient(145deg,#1c2020,#111616)' },
+              { h: 220, title: 'Architecture & Privacy', sub: 'Designing for the ultra-high-net-worth buyer', bg: 'linear-gradient(145deg,#201c1c,#141010)' },
+            ].map(e => (
+              <div key={e.title} className="edit-card">
+                <div className="edit-card-img" style={{ height: e.h }}>
+                  <div className="edit-card-img-inner" style={{ background: e.bg, height: '100%' }} />
                 </div>
-                <div>
-                  <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', margin: '0 0 4px' }}>Phone</p>
-                  <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 18, color: '#ffffff', margin: 0 }}>818.591.1600</p>
+                <div style={{ padding: '1.5rem 1.8rem 2rem' }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.3rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.5rem' }}>{e.title}</div>
+                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', fontWeight: 300, lineHeight: 1.6 }}>{e.sub}</div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Email */}
-              <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <div style={{ width: 40, height: 40, border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="1.5">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                </div>
-                <div>
-                  <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', margin: '0 0 4px' }}>Email</p>
-                  <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 18, color: '#ffffff', margin: 0 }}>info@mcqueenrealty.com</p>
-                </div>
-              </div>
-
-              {/* Office */}
-              <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <div style={{ width: 40, height: 40, border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="1.5">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                <div>
-                  <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', margin: '0 0 4px' }}>Office</p>
-                  <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 18, color: '#ffffff', lineHeight: 1.5, margin: 0 }}>
-                    28047 DOROTHY DR UNIT 303<br />
-                    AGOURA HILLS, CA 91301
-                  </p>
-                </div>
-              </div>
-
-              {/* DRE */}
-              <div style={{ marginTop: 16, paddingTop: 24, borderTop: '1px solid rgba(201,168,76,0.15)' }}>
-                <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 13, color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-                  DRE Licensed · Equal Housing Opportunity
-                </p>
-              </div>
+      {/* ── SERVICES ── */}
+      <section id="services" style={{ borderTop: '1px solid var(--border)', padding: '6rem 2.5rem' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
+            <div>
+              <span className="sec-label">What We Do</span>
+              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 5vw, 5rem)' }}>How We Serve</h2>
             </div>
           </div>
-
-          {/* ── Right: Contact Form ── */}
-          <div>
-            <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 24, color: '#fff', fontWeight: 400, marginBottom: 32 }}>
-              Schedule a Showing
-            </h3>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                <div>
-                  <label style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-                    Full Name
-                  </label>
-                  <input
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Your name"
-                    style={{ ...inputStyle, color: '#000', backgroundColor: '#f5f5f0' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-                    Phone
-                  </label>
-                  <input
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder="Your phone"
-                    style={{ ...inputStyle, color: '#000', backgroundColor: '#f5f5f0' }}
-                  />
-                </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid var(--border)' }}>
+            {[
+              { n:'01', title:'Buyer Representation', body:'We guide discerning buyers through the acquisition of extraordinary properties — from private previews to negotiation and close.' },
+              { n:'02', title:'Seller Advisory', body:'Strategic pricing, editorial marketing, and access to our global network of qualified buyers at every price point.' },
+              { n:'03', title:'Portfolio & Investment', body:'Identify high-value residential opportunities and build a real estate portfolio positioned for long-term appreciation.' },
+            ].map((s, i) => (
+              <div key={s.n} style={{ padding: '3rem 2.5rem 3rem 0', borderLeft: i === 0 ? 'none' : '1px solid var(--border)', paddingLeft: i === 0 ? 0 : '2.5rem' }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '5rem', lineHeight: 1, color: 'var(--light-gray)', marginBottom: '1.5rem' }}>{s.n}</div>
+                <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.5rem', textTransform: 'uppercase', color: 'var(--black)', marginBottom: '1rem', lineHeight: 1.1 }}>{s.title}</h3>
+                <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.88rem', lineHeight: 1.8, color: 'var(--mid)', fontWeight: 300 }}>{s.body}</p>
               </div>
-              <div>
-                <label style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-                  Email Address
-                </label>
-                <input
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="your@email.com"
-                  style={{ ...inputStyle, color: '#000', backgroundColor: '#f5f5f0' }}
-                />
-              </div>
-              <div>
-                <label style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 12, color: '#C9A84C', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
-                  Message
-                </label>
-                <textarea
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="Tell us about the property you're interested in..."
-                  rows={5}
-                  style={{ ...inputStyle, color: '#000', backgroundColor: '#f5f5f0', resize: 'vertical' }}
-                />
-              </div>
-              <button type="submit" style={{
-                padding: '16px 32px',
-                background: '#C9A84C',
-                border: 'none',
-                color: '#0a0a0a',
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: 15,
-                fontWeight: 700,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                transition: 'background 0.3s',
-                alignSelf: 'flex-start',
-              }}
-                onMouseEnter={e => e.target.style.background = '#b8963e'}
-                onMouseLeave={e => e.target.style.background = '#C9A84C'}
-              >
-                Send Inquiry
-              </button>
-            </form>
+            ))}
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* ─── FOOTER ─────────────────────────────────────────────── */
-function Footer() {
-  return (
-    <footer style={{ background: '#080808', borderTop: '1px solid rgba(201,168,76,0.1)', padding: '40px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
-        <div>
-          <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 20, color: '#C9A84C', margin: '0 0 6px', fontWeight: 600 }}>
-            McQueen Realty
-          </p>
-          <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 13, color: 'rgba(255,255,255,0.35)', margin: 0 }}>
-            © {new Date().getFullYear()} McQueen Realty. All rights reserved.
-          </p>
+      {/* ── ABOUT ── */}
+      <section id="about" className="about-grid">
+        <div style={{ background: 'linear-gradient(150deg,#D8D8D8,#BEBEBE)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', bottom: '2.5rem', right: '2.5rem', background: 'rgba(255,255,255,0.96)', padding: '1.2rem 1.8rem', borderLeft: '2px solid var(--gold)' }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '2.4rem', lineHeight: 1, color: 'var(--black)' }}>Est. 2008</div>
+            <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--mid)', marginTop: '0.3rem' }}>Agoura Hills</div>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 32 }}>
-          {['Buy', 'Sell', 'About Us', 'Listings'].map(link => (
-            <a key={link} href={`/${link.toLowerCase().replace(' ', '-')}`} style={{
-              fontFamily: '"Cormorant Garamond", serif',
-              fontSize: 14,
-              color: 'rgba(255,255,255,0.4)',
-              textDecoration: 'none',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              transition: 'color 0.3s',
-            }}
-              onMouseEnter={e => e.target.style.color = '#C9A84C'}
-              onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}
-            >
-              {link}
-            </a>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '5rem 4rem', borderLeft: '1px solid var(--border)' }}>
+          <span className="sec-label">About McQueen Realty</span>
+          <h2 className="sec-h2" style={{ fontSize: 'clamp(2.5rem, 4vw, 4rem)', marginBottom: '2rem' }}>A Standard Built<br/>On Trust</h2>
+          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--mid)', fontWeight: 300, marginBottom: '1.4rem' }}>McQueen Realty was founded on a single conviction: every client — whether purchasing their first estate or expanding a multi-property portfolio — deserves the same caliber of attention and strategy.</p>
+          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--mid)', fontWeight: 300, marginBottom: '2.5rem' }}>Our team combines deep regional market knowledge with a genuine passion for architecture and design. Since 2008, every transaction has been handled with discretion, precision, and genuine investment in the outcome.</p>
+          <a href="#contact" className="link-gold">
+            Work With Us{' '}
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      {/* ── QUOTE ── */}
+      <div style={{ background: 'var(--black)', padding: '5rem 2.5rem', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+        <blockquote style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontStyle: 'italic', fontSize: 'clamp(2rem, 4vw, 4rem)', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1, maxWidth: 900, margin: '0 auto 1.5rem' }}>&quot;Every Exceptional Home Has a Story.&quot;</blockquote>
+        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', fontWeight: 300 }}>— McQueen Realty, est. 2008</p>
+      </div>
+
+      {/* ── CONTACT ── */}
+      <section id="contact" className="contact-grid">
+        <div style={{ background: 'var(--near-black)', padding: '6rem 3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <span className="sec-label">Begin the Conversation</span>
+          <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 4vw, 4.5rem)', color: 'var(--white)', marginBottom: '2rem' }}>We&apos;d Love<br/>to Hear<br/>From You</h2>
+          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.88rem', lineHeight: 1.8, color: 'rgba(255,255,255,0.38)', fontWeight: 300, maxWidth: 340, marginBottom: '3rem' }}>Whether buying, selling, or simply exploring — our team responds within 24 hours.</p>
+          {[['Phone','818.591.1600'],['Email','info@mcqueenrealty.com'],['Office','28047 Dorothy Dr Unit 303, Agoura Hills CA 91301']].map(([l,v]) => (
+            <div key={l} style={{ marginBottom: '1.2rem' }}>
+              <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.56rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', marginBottom: '0.2rem' }}>{l}</div>
+              <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.88rem', color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>{v}</div>
+            </div>
           ))}
         </div>
-      </div>
-    </footer>
-  );
-}
+        <div style={{ padding: '6rem 3.5rem', background: 'var(--off-white)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
+            {[['Your Name','text','name'],['Email Address','email','email']].map(([label, type, name]) => (
+              <div key={name} className="field-wrap">
+                <label className="field-label">{label}</label>
+                <input className="field-input" type={type} name={name} />
+              </div>
+            ))}
+            <div className="field-wrap" style={{ marginBottom: '2.5rem' }}>
+              <label className="field-label">Message</label>
+              <textarea className="field-textarea" name="message" rows={4} />
+            </div>
+            <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+              Send Inquiry{' '}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
 
-/* ─── PAGE ───────────────────────────────────────────────── */
-export default function Home() {
-  return (
-    <main style={{ background: '#0a0a0a', minHeight: '100vh' }}>
-      <Navbar />
-      <VideoHero />
-      <StatsBar />
-      {/* World of McQueen ABOVE Property Search */}
-      <WorldOfMcQueen />
-      <PropertySearch />
-      <HowWeServe />
-      <ContactSection />
-      <Footer />
-    </main>
+      {/* ── FOOTER ── */}
+      <footer style={{ background: 'var(--black)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '4rem 2.5rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.06)', gap: '2rem', flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--white)', marginBottom: '0.6rem' }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
+            <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>28047 Dorothy Dr Unit 303, Agoura Hills CA 91301</div>
+          </div>
+          <div style={{ display: 'flex', gap: '4rem' }}>
+            {[
+              ['Properties', ['Buy','Rent','Sell','Exclusives']],
+              ['Company', ['About Us','Agents','Services','Journal']],
+              ['Markets', ['Beverly Hills','Bel Air','Malibu','Santa Monica']],
+            ].map(([heading, links]) => (
+              <div key={heading}>
+                <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '1rem' }}>{heading}</div>
+                {links.map(l => (
+                  <div key={l} style={{ marginBottom: '0.6rem' }}>
+                    <a href="#" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.8rem', color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>{l}</a>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.4rem 2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>© 2026 McQueen Realty. DRE Licensed · Equal Housing Opportunity. All rights reserved.</div>
+          <div style={{ display: 'flex', gap: '2rem' }}>
+            {['Privacy Policy','Terms of Service','Do Not Sell My Info'].map(l => (
+              <a key={l} href="#" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.6rem', color: 'rgba(255,255,255,0.18)' }}>{l}</a>
+            ))}
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }
