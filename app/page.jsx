@@ -824,7 +824,7 @@ export default function Home() {
                 city: 'Los Angeles, CA 90077',
                 stats: '7 bd  ·  9 ba  ·  12,027 sqft',
                 sub: 'Warm Modern · Infinity Pool · City & Ocean Views',
-                img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80&auto=format&fit=crop',
+                img: 'https://mediaservice.themls.com/large/26669607/26669607_ee9fb06e-3867-4b2f-845f-25ea5d07c9b5.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26669607_autosearch'),
               },
               {
@@ -835,7 +835,7 @@ export default function Home() {
                 city: 'Malibu, CA 90265',
                 stats: '3 bd  ·  3 ba  ·  3,377 sqft',
                 sub: 'New Construction 2025',
-                img: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80&auto=format&fit=crop',
+                img: 'https://dlajgvw9htjpb.cloudfront.net/cms/b256d49d-ec8d-4832-be38-002d46080c61/25602415/-297977586725773635.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/25602415_autosearch'),
               },
               {
@@ -846,7 +846,7 @@ export default function Home() {
                 city: 'Hidden Hills, CA 91302',
                 stats: '7 bd  ·  10 ba  ·  13,802 sqft',
                 sub: 'Guard-Gated Estate · New Build 2024',
-                img: 'https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=900&q=80&auto=format&fit=crop',
+                img: 'https://img.chime.me/imageemb/mls-listing/976/SR26011664/c2926e50/1768613485/original_FMhLDoQgDAbgG1F-OkBnbgO0ZBY-iJIYb2_cfv85x_kjarq5w8oy726mru3rS4SQiX1KASIf4m9tqSMbq8QgkJI5RqgHTA3sLqvjCQAA__8.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/SR26011664_autosearch'),
               },
             ].map(e => (
