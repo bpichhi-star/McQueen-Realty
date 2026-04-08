@@ -819,13 +819,13 @@ export default function Home() {
               {
                 h: 380,
                 tag: 'Bel Air',
-                price: '$7,985,000',
-                address: '1769 Stone Canyon Road',
+                price: '$14,999,000',
+                address: '1475 Bel Air Road',
                 city: 'Los Angeles, CA 90077',
-                stats: '5 bd  ·  4.5 ba  ·  5,210 sqft',
-                sub: 'Mid-Century Modern · Stone Canyon Reservoir Views',
+                stats: '7 bd  ·  9 ba  ·  12,027 sqft',
+                sub: 'Warm Modern · Infinity Pool · City & Ocean Views',
                 img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80&auto=format&fit=crop',
-                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/7000000_price/10000000_maxprice/home_homeType/active,short-sales,foreclosures_homeStatus/90077_autosearch'),
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26669607_autosearch'),
               },
               {
                 h: 220,
