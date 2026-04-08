@@ -855,44 +855,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── LISTINGS ── */}
-      <section id="listings" style={{ padding: '6rem 2.5rem', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
-            <div>
-              <span className="sec-label">Featured Properties</span>
-              <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 5vw, 5rem)', color: 'var(--black)' }}>Selected Homes</h2>
-            </div>
-            <a href="/listings" className="link-underline">View All Properties →</a>
-          </div>
-          <div className="listings-grid">
-            {[
-              { tag:'Exclusive', h:480, addr:'482 Sunset Ridge Drive', city:'Beverly Hills, CA 90210', bd:6, ba:7, sf:'9,200', price:'$8,950,000', bg:'linear-gradient(160deg,#CECECE,#A8A8A8)' },
-              { tag:'New', h:280, addr:'17 Oceanfront Terrace', city:'Malibu, CA 90265', bd:5, ba:6, sf:'7,800', price:'$12,500,000', bg:'linear-gradient(160deg,#C8D0D0,#A4B0B0)' },
-              { tag:'Featured', h:280, addr:'903 Canyon Crest Lane', city:'Bel Air, CA 90077', bd:5, ba:5, sf:'6,400', price:'$6,250,000', bg:'linear-gradient(160deg,#D0CCCC,#B0AAAA)' },
-            ].map(p => (
-              <div key={p.addr} className="prop-card">
-                <div className="prop-card-img" style={{ height: p.h }}>
-                  <div className="prop-card-img-inner" style={{ background: p.bg, height: '100%', position: 'relative' }}>
-                    <div className="prop-tag">{p.tag}</div>
-                  </div>
-                </div>
-                <div className="prop-body">
-                  <div className="prop-address">{p.addr}</div>
-                  <div className="prop-city">{p.city}</div>
-                  <div className="prop-stats">
-                    <span className="prop-stat">{p.bd} BD</span>
-                    <span className="prop-stat">{p.ba} BA</span>
-                    <span className="prop-stat">{p.sf} SF</span>
-                  </div>
-                  <div className="prop-price">{p.price}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── MLS SEARCH ── */}
       <section className="idx-section" id="mls-search">
 
@@ -917,7 +879,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Full-bleed iframe — Matrix header clipped via offset */}
+        {/* ApexIDX full search — map + listings + filters */}
         <div className="idx-clip">
           <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
             <div style={{
@@ -928,7 +890,7 @@ export default function Home() {
             <div className="idx-loader-label">Loading Live Listings</div>
           </div>
           <iframe
-            src="https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c"
+            src="https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus"
             frameBorder="0"
             title="McQueen Realty MLS Property Search"
             allowFullScreen
