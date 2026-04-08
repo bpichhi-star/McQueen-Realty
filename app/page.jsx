@@ -816,19 +816,46 @@ export default function Home() {
           </div>
           <div className="edit-grid">
             {[
-              { h: 380, title: 'The New Bel Air', sub: "How LA's most storied hillside is quietly reinventing itself", bg: 'linear-gradient(145deg,#222,#111)' },
-              { h: 220, title: 'Malibu Colony Report', sub: 'Q1 2026 Market Insight', bg: 'linear-gradient(145deg,#1c2020,#111616)' },
-              { h: 220, title: 'Architecture & Privacy', sub: 'Designing for the ultra-high-net-worth buyer', bg: 'linear-gradient(145deg,#201c1c,#141010)' },
+              {
+                h: 380,
+                title: 'The New Bel Air',
+                sub: 'Homes from $7,000,000 · Bel Air, CA 90077',
+                tag: 'From $7M+',
+                bg: 'linear-gradient(145deg,#222,#111)',
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/7000000_price/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus/90077_autosearch'),
+              },
+              {
+                h: 220,
+                title: 'Malibu Colony',
+                sub: 'Homes from $5,000,000 · Malibu, CA 90265',
+                tag: 'From $5M+',
+                bg: 'linear-gradient(145deg,#1c2020,#111616)',
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/5000000_price/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus/90265_autosearch'),
+              },
+              {
+                h: 220,
+                title: 'Hidden Hills',
+                sub: 'Homes from $6,000,000 · Hidden Hills, CA 91301',
+                tag: 'From $6M+',
+                bg: 'linear-gradient(145deg,#201c1c,#141010)',
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/6000000_price/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus/91301_autosearch'),
+              },
             ].map(e => (
-              <div key={e.title} className="edit-card">
-                <div className="edit-card-img" style={{ height: e.h }}>
+              <a key={e.title} href={e.href} className="edit-card" style={{ textDecoration: 'none', display: 'block' }}>
+                <div className="edit-card-img" style={{ height: e.h, position: 'relative' }}>
                   <div className="edit-card-img-inner" style={{ background: e.bg, height: '100%' }} />
+                  <div style={{ position: 'absolute', top: '1.2rem', left: '1.2rem', background: 'var(--gold)', color: 'var(--black)', fontFamily: "'Jost', sans-serif", fontSize: '0.54rem', letterSpacing: '0.22em', padding: '0.32rem 0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>{e.tag}</div>
                 </div>
-                <div style={{ padding: '1.5rem 1.8rem 2rem' }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.3rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.5rem' }}>{e.title}</div>
-                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', fontWeight: 300, lineHeight: 1.6 }}>{e.sub}</div>
+                <div style={{ padding: '1.5rem 1.8rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <div>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: '1.3rem', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1.05, marginBottom: '0.5rem' }}>{e.title}</div>
+                    <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.38)', fontWeight: 300, lineHeight: 1.6 }}>{e.sub}</div>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: '1rem' }}>
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                  </svg>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
