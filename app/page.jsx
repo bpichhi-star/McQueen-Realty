@@ -801,13 +801,7 @@ export default function Home() {
 
             {/* ── Tabs ── */}
             <div className="csearch-tabs">
-              {['Buy','Rent'].map(t => (
-                <button
-                  key={t}
-                  className={`csearch-tab ${searchTab === t.toLowerCase() ? 'tab-active' : ''}`}
-                  onClick={() => setSearchTab(t.toLowerCase())}
-                >{t}</button>
-              ))}
+              <button className="csearch-tab tab-active">Buy</button>
             </div>
 
             {/* ── Location Input ── */}
@@ -845,115 +839,10 @@ export default function Home() {
 
             {/* ── Filter Pills ── */}
             <div className="csearch-filters">
-
-              {/* Beds & Baths */}
-              <div style={{ position: 'relative', flexShrink: 0 }}>
-                <button
-                  className={`csearch-pill ${openFilter === 'beds' || beds || baths ? 'pill-active' : ''}`}
-                  onClick={() => setOpenFilter(openFilter === 'beds' ? null : 'beds')}
-                >
-                  {beds && baths ? `${beds} bd · ${baths} ba` : beds ? `${beds} bd` : baths ? `${baths} ba` : 'Beds & Baths'}
-                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                {openFilter === 'beds' && (
-                  <div className="csearch-dropdown" style={{ minWidth: 280 }}>
-                    <span className="csearch-dd-label">Bedrooms</span>
-                    <div className="csearch-opt-row">
-                      {['Any','1+','2+','3+','4+','5+'].map(o => (
-                        <button key={o} className={`csearch-opt ${(o === 'Any' && !beds) || beds === o ? 'opt-sel' : ''}`}
-                          onClick={() => setBeds(o === 'Any' ? '' : o)}>{o}</button>
-                      ))}
-                    </div>
-                    <span className="csearch-dd-label" style={{ marginTop: '1rem' }}>Bathrooms</span>
-                    <div className="csearch-opt-row">
-                      {['Any','1+','2+','3+','4+'].map(o => (
-                        <button key={o} className={`csearch-opt ${(o === 'Any' && !baths) || baths === o ? 'opt-sel' : ''}`}
-                          onClick={() => setBaths(o === 'Any' ? '' : o)}>{o}</button>
-                      ))}
-                    </div>
-                    <div className="csearch-dd-apply"><button onClick={() => setOpenFilter(null)}>Apply</button></div>
-                  </div>
-                )}
-              </div>
-
-              {/* Price */}
-              <div style={{ position: 'relative', flexShrink: 0 }}>
-                <button
-                  className={`csearch-pill ${openFilter === 'price' || priceRange.min || priceRange.max ? 'pill-active' : ''}`}
-                  onClick={() => setOpenFilter(openFilter === 'price' ? null : 'price')}
-                >
-                  {priceRange.min || priceRange.max
-                    ? `${priceRange.min ? '$' + Number(priceRange.min).toLocaleString() : 'Min'} – ${priceRange.max ? '$' + Number(priceRange.max).toLocaleString() : 'Max'}`
-                    : 'Price'}
-                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                {openFilter === 'price' && (
-                  <div className="csearch-dropdown" style={{ minWidth: 310 }}>
-                    <span className="csearch-dd-label">Quick Select</span>
-                    <div className="csearch-opt-row" style={{ marginBottom: '0.4rem' }}>
-                      {[['Under $1M',0,1000000],['$1M–$3M',1000000,3000000],['$3M–$6M',3000000,6000000],['$6M–$10M',6000000,10000000],['$10M+',10000000,'']].map(([l,mn,mx]) => (
-                        <button key={l}
-                          className={`csearch-opt ${String(priceRange.min) === String(mn) && String(priceRange.max) === String(mx) ? 'opt-sel' : ''}`}
-                          onClick={() => setPriceRange({ min: mn, max: mx })}>{l}</button>
-                      ))}
-                    </div>
-                    <span className="csearch-dd-label" style={{ marginTop: '0.8rem' }}>Custom Range</span>
-                    <div className="csearch-price-inputs">
-                      <input className="csearch-price-inp" placeholder="Min $"
-                        value={priceRange.min ? priceRange.min.toLocaleString() : ''}
-                        onChange={(e) => setPriceRange(p => ({ ...p, min: e.target.value.replace(/\D/g,'') }))} />
-                      <span style={{ color: 'var(--faint)', fontSize: '0.7rem', flexShrink: 0 }}>–</span>
-                      <input className="csearch-price-inp" placeholder="Max $"
-                        value={priceRange.max ? priceRange.max.toLocaleString() : ''}
-                        onChange={(e) => setPriceRange(p => ({ ...p, max: e.target.value.replace(/\D/g,'') }))} />
-                    </div>
-                    <div className="csearch-dd-apply"><button onClick={() => setOpenFilter(null)}>Apply</button></div>
-                  </div>
-                )}
-              </div>
-
-              {/* Home Type */}
-              <div style={{ position: 'relative', flexShrink: 0 }}>
-                <button
-                  className={`csearch-pill ${openFilter === 'type' || homeTypes.length > 0 ? 'pill-active' : ''}`}
-                  onClick={() => setOpenFilter(openFilter === 'type' ? null : 'type')}
-                >
-                  {homeTypes.length === 0 ? 'Home Type' : homeTypes.length === 1 ? homeTypes[0] : `${homeTypes.length} Types`}
-                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                {openFilter === 'type' && (
-                  <div className="csearch-dropdown">
-                    <span className="csearch-dd-label">Property Type</span>
-                    <div className="csearch-opt-row">
-                      {['House','Condo','Townhouse','Multi-Family','Land'].map(t => (
-                        <button key={t}
-                          className={`csearch-opt ${homeTypes.includes(t) ? 'opt-sel' : ''}`}
-                          onClick={() => setHomeTypes(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])}>{t}</button>
-                      ))}
-                    </div>
-                    <div className="csearch-dd-apply"><button onClick={() => setOpenFilter(null)}>Apply</button></div>
-                  </div>
-                )}
-              </div>
-
-              {/* More Filters → goes to full listings page */}
-              <button className="csearch-pill" onClick={() => { window.location.href = '/search'; }}>
+              <button className="csearch-pill" onClick={handleSearch}>
                 More Filters
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
-
-              {/* Clear all — only when filters are active */}
-              {(beds || baths || priceRange.min || priceRange.max || homeTypes.length > 0) && (
-                <button
-                  onClick={() => { setBeds(''); setBaths(''); setPriceRange({ min: '', max: '' }); setHomeTypes([]); }}
-                  style={{
-                    marginLeft: 'auto', background: 'transparent', border: 'none', cursor: 'pointer',
-                    fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', letterSpacing: '0.06em',
-                    color: 'var(--mid)', textDecoration: 'underline', whiteSpace: 'nowrap', flexShrink: 0,
-                  }}
-                >Clear all</button>
-              )}
-
             </div>
           </div>{/* /csearch-panel */}
 
@@ -965,19 +854,6 @@ export default function Home() {
           </a>
         </div>
       </section>
-
-      {/* ── MARQUEE ── */}
-      <div className="marquee-wrap">
-        <div className="marquee-track">
-          {['Beverly Hills','Bel Air','Malibu','Santa Monica','Pacific Palisades','Holmby Hills','Brentwood','Los Feliz',
-            'Beverly Hills','Bel Air','Malibu','Santa Monica','Pacific Palisades','Holmby Hills','Brentwood','Los Feliz'].map((name, i) => (
-            <a key={i} href={`/search?q=${encodeURIComponent(name)}`} className="marquee-item"
-              style={{ color: i % 2 === 0 ? 'rgba(255,255,255,0.82)' : 'var(--gold)' }}>
-              {name}<span className="marquee-dot">◆</span>
-            </a>
-          ))}
-        </div>
-      </div>
 
       {/* ── LISTINGS ── */}
       <section id="listings" style={{ padding: '6rem 2.5rem', borderBottom: '1px solid var(--border)' }}>
