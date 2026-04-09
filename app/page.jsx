@@ -991,7 +991,7 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid var(--border)' }}>
             {[
               { n:'01', title:'Buyer Representation', body:'We guide discerning buyers through the acquisition of extraordinary properties — from private previews to negotiation and close.' },
-              { n:'02', title:'Seller Advisory', body:'Strategic pricing, editorial marketing, and access to our global network of qualified buyers at every price point.' },
+              { n:'02', title:'Seller Representation & Advisory', body:'Strategic pricing, editorial marketing, and access to our global network of qualified buyers at every price point.' },
               { n:'03', title:'Portfolio & Investment', body:'Identify high-value residential opportunities and build a real estate portfolio positioned for long-term appreciation.' },
             ].map((s, i) => (
               <div key={s.n} style={{ padding: '3rem 2.5rem 3rem 0', borderLeft: i === 0 ? 'none' : '1px solid var(--border)', paddingLeft: i === 0 ? 0 : '2.5rem' }}>
@@ -1078,7 +1078,7 @@ export default function Home() {
             {[
               ['Properties', ['Buy','Rent','Sell','Exclusives']],
               ['Company', ['About Us','Agents','Services','Journal']],
-              ['Markets', ['Beverly Hills','Bel Air','Malibu','Santa Monica']],
+              ['Markets', ['Los Angeles County','San Fernando Valley','Ventura County']],
             ].map(([heading, links]) => (
               <div key={heading}>
                 <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '1rem' }}>{heading}</div>
