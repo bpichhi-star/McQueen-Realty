@@ -249,7 +249,7 @@ export default function BuyPage() {
         </div>
       </section>
 
-      {/* ── MLS SEARCH ── */
+      {/* ── MLS SEARCH ── */}
       <section className="idx-section">
         <div className="idx-context-bar">
           <div className="idx-context-left">
