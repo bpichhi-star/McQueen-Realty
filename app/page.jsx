@@ -719,7 +719,7 @@ export default function Home() {
             McQueen<span className="sep">·</span>Realty
           </div>
           <div className="nav-links">
-            {['Buy','Rent','Sell','Agents'].map(l => (
+            {['Buy','Sell','Rent','Agents'].map(l => (
               <a key={l} href={`#${l.toLowerCase()}`} className="nav-link"
                 style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)' }}>{l}</a>
             ))}
@@ -1076,8 +1076,8 @@ export default function Home() {
           </div>
           <div style={{ display: 'flex', gap: '4rem' }}>
             {[
-              ['Properties', ['Buy','Rent','Sell','Exclusives']],
-              ['Company', ['About Us','Agents','Services','Journal']],
+              ['Properties', ['Buy','Sell','Rent','Exclusives']],
+              ['Company', ['About Us','Agents','Services']],
               ['Markets', ['Los Angeles County','San Fernando Valley','Ventura County']],
             ].map(([heading, links]) => (
               <div key={heading}>
