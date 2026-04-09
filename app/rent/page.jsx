@@ -141,7 +141,7 @@ export default function RentPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const IDX_URL = 'https://www.crmls.org/servlet/lDisplayListings?LA=EN&TRANSACTION_TYPE=L';
+  const IDX_URL = 'https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c';
 
   return (
     <>
