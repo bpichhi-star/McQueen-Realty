@@ -22,7 +22,7 @@ export default function SellPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=Jost:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
           --black: #000000; --near-black: #0D0D0D; --white: #FFFFFF;
@@ -82,34 +82,30 @@ export default function SellPage() {
         </div>
       </nav>
 
-      {/* ── HERO IMAGE ── */}
-      <div style={{ width: '100%', height: '75vh', minHeight: 600, overflow: 'hidden', position: 'relative' }}>
+      {/* ── HERO ── */}
+      <div style={{ width: '100%', height: '88vh', minHeight: 640, overflow: 'hidden', position: 'relative', background: '#000' }}>
         <img
           src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=85"
           alt="Luxury property"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 50%', display: 'block', opacity: 0.82 }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%)' }} />
-      </div>
-
-      {/* ── INTRO ── */}
-      <section style={{ padding: '7rem 2.5rem', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8rem', alignItems: 'start' }}>
-          <div>
-            <span style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, display: 'block', marginBottom: '1.2rem' }}>Seller Advisory</span>
-            <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(3.5rem, 6vw, 7rem)', textTransform: 'uppercase', color: 'var(--black)', lineHeight: 0.88, letterSpacing: '-0.01em', marginBottom: '2rem' }}>Selling Your<br/>Home With<br/>McQueen</h1>
-          </div>
-          <div style={{ paddingTop: '0.5rem' }}>
-            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '1rem', lineHeight: 1.9, color: 'var(--mid)', fontWeight: 300, marginBottom: '2.5rem' }}>Powered by market intelligence and deep local expertise, McQueen Realty puts the full weight of our team behind every listing — delivering boutique service, editorial-grade marketing, and results that speak for themselves.</p>
-            <a href="#connect" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', background: 'var(--black)', color: 'var(--white)', padding: '1rem 2.2rem', fontFamily: "'Jost', sans-serif", fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 500, transition: 'background 0.2s' }}
-              onMouseOver={e => e.currentTarget.style.background = 'var(--gold)'}
-              onMouseOut={e => e.currentTarget.style.background = 'var(--black)'}>
-              Discover Your Home's Value
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.72) 100%)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 2.5rem 5rem', maxWidth: 1400, margin: '0 auto' }}>
+          <div style={{ maxWidth: 1400 }}>
+            <span style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, display: 'block', marginBottom: '1rem' }}>Seller Advisory · McQueen Realty</span>
+            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontStyle: 'italic', fontSize: 'clamp(4rem, 7vw, 8.5rem)', textTransform: 'none', color: 'var(--white)', lineHeight: 1.0, letterSpacing: '-0.01em', marginBottom: '2rem' }}>Selling Your<br/>Home With<br/>McQueen</h1>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
+              <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.95rem', lineHeight: 1.85, color: 'rgba(255,255,255,0.6)', fontWeight: 300, maxWidth: 480 }}>Powered by market intelligence and deep local expertise, McQueen Realty puts the full weight of our team behind every listing — boutique service, editorial marketing, results that speak for themselves.</p>
+              <a href="#connect" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', background: 'var(--gold)', color: 'var(--white)', padding: '1rem 2.2rem', fontFamily: "'Jost', sans-serif", fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}
+                onMouseOver={e => e.currentTarget.style.background = 'var(--gold-dark)'}
+                onMouseOut={e => e.currentTarget.style.background = 'var(--gold)'}>
+                Discover Your Home's Value
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* ── VALUE PROPS ── */}
       <section style={{ padding: '7rem 2.5rem', background: 'var(--off-white)', borderBottom: '1px solid var(--border)' }}>
