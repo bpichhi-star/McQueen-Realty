@@ -797,7 +797,7 @@ export default function Home() {
                 city: 'Los Angeles, CA 90077',
                 stats: '7 bd  ·  9 ba  ·  12,027 sqft',
                 sub: 'Warm Modern · Infinity Pool · City & Ocean Views',
-                img: 'https://mediaservice.themls.com/large/26669607/26669607_ee9fb06e-3867-4b2f-845f-25ea5d07c9b5.jpg',
+                img: 'https://photos.zillowstatic.com/fp/7dc5b14e37789f156b24ce8ff4e432ee-cc_ft_960.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26669607_autosearch'),
               },
               {
