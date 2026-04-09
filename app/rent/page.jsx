@@ -104,22 +104,16 @@ export default function RentPage() {
 
   const handleSearch = () => {
     const q = searchQuery.trim().toLowerCase();
-    let locationSegment = '';
+    let zip = '';
     if (/^\d{5}$/.test(q)) {
-      locationSegment = `${q}_autosearch`;
+      zip = q;
     } else if (q && NEIGHBORHOOD_ZIPS[q]) {
-      locationSegment = `${NEIGHBORHOOD_ZIPS[q]}_autosearch`;
-    } else if (q) {
-      locationSegment = `${encodeURIComponent(q)}_autosearch`;
+      zip = NEIGHBORHOOD_ZIPS[q];
     }
-    const segments = [
-      'lastModified_orderBy', 'desc_order',
-      'home,Condo,Townhouse_homeType',
-      'lease_homeStatus',
-      locationSegment || null,
-    ].filter(Boolean).join('/');
-    const apexUrl = `https://apexidx.com/idx_lite/results/EN_LA/${segments}`;
-    window.location.href = `/search?src=${encodeURIComponent(apexUrl)}`;
+    const params = new URLSearchParams({ LA: 'EN', TRANSACTION_TYPE: 'L' });
+    if (zip) params.set('ZIP', zip);
+    else if (q) params.set('CITY', q);
+    window.location.href = `https://www.crmls.org/servlet/lDisplayListings?${params.toString()}`;
   };
 
   const handleGeolocate = () => {
@@ -147,7 +141,7 @@ export default function RentPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const IDX_URL = 'https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Condo,Townhouse_homeType/rental_homeStatus';
+  const IDX_URL = 'https://www.crmls.org/servlet/lDisplayListings?LA=EN&TRANSACTION_TYPE=L';
 
   return (
     <>
