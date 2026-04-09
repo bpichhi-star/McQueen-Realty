@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const NAV_LINKS = [['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Agents','#agents']];
 
@@ -66,11 +66,102 @@ const SHARED_CSS = `
   .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 4rem 2.5rem 3rem; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 2rem; flex-wrap: wrap; }
   .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 2.5rem; flex-wrap: wrap; gap: 1rem; }
   .sec-label { font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-weight: 500; display: block; margin-bottom: 1rem; }
+  .search-section { position: relative; background: var(--near-black); padding: 5rem 2.5rem 6rem; border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
+  .search-bg { position: absolute; inset: 0; background-size: cover; background-position: center 30%; opacity: 0.18; }
+  .search-content { position: relative; z-index: 2; }
+  .search-headline { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: italic; font-size: clamp(3rem, 6vw, 7rem); line-height: 0.88; letter-spacing: -0.01em; text-transform: uppercase; color: var(--white); margin-bottom: 1rem; }
+  .search-sub { font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 300; letter-spacing: 0.08em; color: rgba(255,255,255,0.42); margin-bottom: 2.5rem; }
+  .csearch-panel { background: var(--white); max-width: 820px; box-shadow: 0 20px 80px rgba(0,0,0,0.45); }
+  .csearch-tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 1.5rem; }
+  .csearch-tab { padding: 0.85rem 1.1rem; background: transparent; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); transition: color 0.2s, border-color 0.2s; }
+  .csearch-tab.tab-active { color: var(--black); border-bottom-color: var(--gold); }
+  .csearch-input-row { display: flex; align-items: center; padding: 0 1.5rem; height: 62px; border-bottom: 1px solid var(--border); gap: 0.8rem; }
+  .csearch-input { flex: 1; background: transparent; border: none; outline: none; font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 300; color: var(--black); letter-spacing: 0.02em; }
+  .csearch-input::placeholder { color: var(--faint); }
+  .csearch-divider { width: 1px; height: 26px; background: var(--border); flex-shrink: 0; }
+  .csearch-search-btn { display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 1.4rem; background: var(--black); color: var(--white); border: none; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; flex-shrink: 0; transition: background 0.2s; }
+  .csearch-search-btn:hover { background: var(--gold); }
+  .csearch-filters { display: flex; align-items: center; padding: 0 1.5rem; height: 50px; gap: 6px; overflow-x: auto; }
+  .csearch-filters::-webkit-scrollbar { display: none; }
+  .csearch-pill { display: flex; align-items: center; gap: 4px; height: 30px; padding: 0 11px; background: transparent; border: 1px solid var(--border); color: var(--black); font-family: 'Jost', sans-serif; font-size: 0.67rem; letter-spacing: 0.04em; font-weight: 400; white-space: nowrap; cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+  .csearch-pill:hover { border-color: var(--black); }
+  .csearch-geo-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: transparent; border: 1px solid var(--border); cursor: pointer; flex-shrink: 0; color: var(--faint); transition: border-color 0.15s, color 0.15s; }
+  .csearch-geo-btn:hover { border-color: var(--gold); color: var(--gold); }
+  @keyframes spinOnce { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .csearch-geo-btn.spinning svg { animation: spinOnce 0.8s ease both; }
 `;
 
 export default function BuyPage() {
   const [scrolled, setScrolled] = useState(false);
   const [idxLoaded, setIdxLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [homeTypes, setHomeTypes] = useState([]);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const searchPanelRef = useRef(null);
+
+  const NEIGHBORHOOD_ZIPS = {
+    'beverly hills': '90210', 'bel air': '90077', 'malibu': '90265',
+    'santa monica': '90401', 'pacific palisades': '90272', 'brentwood': '90049',
+    'hollywood hills': '90046', 'west hollywood': '90046', 'calabasas': '91302',
+    'hidden hills': '91301', 'holmby hills': '90024', 'westwood': '90024',
+    'los feliz': '90027', 'silver lake': '90026', 'studio city': '91604',
+    'sherman oaks': '91403', 'encino': '91316', 'woodland hills': '91364',
+    'hancock park': '90004', 'los angeles': '90001', 'west la': '90025',
+    'culver city': '90232', 'marina del rey': '90292', 'playa del rey': '90293',
+    'manhattan beach': '90266', 'hermosa beach': '90254', 'redondo beach': '90277',
+    'palos verdes': '90274', 'san marino': '91108', 'pasadena': '91101',
+    'glendale': '91201', 'burbank': '91501', 'tarzana': '91356',
+    'northridge': '91324', 'chatsworth': '91311', 'porter ranch': '91326',
+  };
+
+  const buildApexUrl = () => {
+    const q = searchQuery.trim().toLowerCase();
+    let locationSegment = '';
+    if (/^\d{5}$/.test(q)) {
+      locationSegment = `${q}_autosearch`;
+    } else if (q && NEIGHBORHOOD_ZIPS[q]) {
+      locationSegment = `${NEIGHBORHOOD_ZIPS[q]}_autosearch`;
+    } else if (q) {
+      locationSegment = `${encodeURIComponent(q)}_autosearch`;
+    }
+    const typeMap = { 'House': 'home', 'Condo': 'Condo', 'Townhouse': 'Townhouse', 'Multi-Family': 'MultiFamily', 'Land': 'Land' };
+    const types = homeTypes.length > 0 ? homeTypes.map(t => typeMap[t] || t).join(',') : 'home,Townhouse';
+    const segments = [
+      'lastModified_orderBy', 'desc_order',
+      priceRange.min ? `${priceRange.min}_price` : null,
+      priceRange.max ? `${priceRange.max}_maxprice` : null,
+      `${types}_homeType`,
+      'active,short-sales,foreclosures_homeStatus',
+      locationSegment || null,
+    ].filter(Boolean).join('/');
+    return `https://apexidx.com/idx_lite/results/EN_LA/${segments}`;
+  };
+
+  const handleSearch = () => {
+    const apexUrl = buildApexUrl();
+    const encoded = encodeURIComponent(apexUrl);
+    window.location.href = `/search?src=${encoded}`;
+  };
+
+  const handleGeolocate = () => {
+    if (!navigator.geolocation) return;
+    setGeoLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+          const data = await res.json();
+          const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.county || '';
+          const state = data.address?.state_code || data.address?.state || '';
+          if (city) setSearchQuery(state ? `${city}, ${state}` : city);
+        } catch {} finally { setGeoLoading(false); }
+      },
+      () => setGeoLoading(false),
+      { timeout: 8000 }
+    );
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -116,7 +207,49 @@ export default function BuyPage() {
         </div>
       </div>
 
-      {/* ── MLS SEARCH ── */}
+
+      {/* ── SEARCH BAR ── */}
+      <section className="search-section">
+        <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
+        <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
+          <h2 className="search-headline">Search<br/>Properties</h2>
+          <p className="search-sub">Find your next home across Southern California</p>
+          <div className="csearch-panel" ref={searchPanelRef}>
+            <div className="csearch-tabs">
+              <button className="csearch-tab tab-active">Buy</button>
+            </div>
+            <div className="csearch-input-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" strokeWidth="2" strokeLinecap="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input className="csearch-input" placeholder="City, neighborhood, ZIP, or address"
+                value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }} />
+              <button className={`csearch-geo-btn ${geoLoading ? 'spinning' : ''}`} onClick={handleGeolocate} title="Use my location">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  <circle cx="12" cy="12" r="7" strokeDasharray="2 2"/>
+                </svg>
+              </button>
+              <div className="csearch-divider" />
+              <button className="csearch-search-btn" onClick={handleSearch}>
+                Search
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </button>
+            </div>
+            <div className="csearch-filters">
+              <button className="csearch-pill" onClick={handleSearch}>
+                More Filters
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MLS SEARCH ── */
       <section className="idx-section">
         <div className="idx-context-bar">
           <div className="idx-context-left">
