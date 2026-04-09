@@ -719,15 +719,15 @@ export default function Home() {
             McQueen<span className="sep">·</span>Realty
           </div>
           <div className="nav-links">
-            {['Buy','Sell','Rent','Agents'].map(l => (
-              <a key={l} href={`#${l.toLowerCase()}`} className="nav-link"
-                style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)' }}>{l}</a>
+            {[['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Agents','#agents']].map(([label, href]) => (
+              <a key={label} href={href} className="nav-link"
+                style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)' }}>{label}</a>
             ))}
           </div>
           <div className="nav-right">
-            <a href="#listings" className="nav-link"
+            <a href="/new-listings" className="nav-link"
               style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)', padding: '0 0.8rem' }}>New Listings</a>
-            <a href="#listings" className="nav-link"
+            <a href="/search" className="nav-link"
               style={{ color: overVideo ? 'rgba(255,255,255,0.72)' : 'var(--mid)', padding: '0 0.8rem' }}>Exclusives</a>
             <a href="#contact" className="nav-cta">Schedule Showing</a>
           </div>
@@ -797,19 +797,19 @@ export default function Home() {
                 city: 'Los Angeles, CA 90077',
                 stats: '7 bd  ·  9 ba  ·  12,027 sqft',
                 sub: 'Warm Modern · Infinity Pool · City & Ocean Views',
-                img: 'https://photos.zillowstatic.com/fp/7dc5b14e37789f156b24ce8ff4e432ee-cc_ft_960.jpg',
+                img: 'https://mediaservice.themls.com/large/26669607/26669607_ee9fb06e-3867-4b2f-845f-25ea5d07c9b5.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26669607_autosearch'),
               },
               {
                 h: 220,
                 tag: 'Malibu',
-                price: '$9,995,000',
-                address: '29924 Harvester Road',
+                price: '$5,100,000',
+                address: '5416 Horizon Drive',
                 city: 'Malibu, CA 90265',
-                stats: '5 bd  ·  7 ba  ·  7,500 sqft',
-                sub: 'New Construction · Ocean Views · Malibu Park',
-                img: 'https://photos.zillowstatic.com/fp/d3ab9faf398f958423767d8c53528f91-cc_ft_960.jpg',
-                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26672875_autosearch'),
+                stats: '3 bd  ·  3 ba  ·  3,377 sqft',
+                sub: 'New Construction 2025',
+                img: 'https://dlajgvw9htjpb.cloudfront.net/cms/b256d49d-ec8d-4832-be38-002d46080c61/25602415/-297977586725773635.jpg',
+                href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/25602415_autosearch'),
               },
               {
                 h: 220,
@@ -991,7 +991,7 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid var(--border)' }}>
             {[
               { n:'01', title:'Buyer Representation', body:'We guide discerning buyers through the acquisition of extraordinary properties — from private previews to negotiation and close.' },
-              { n:'02', title:'Seller Representation & Advisory', body:'Strategic pricing, editorial marketing, and access to our global network of qualified buyers at every price point.' },
+              { n:'02', title:'Seller Advisory', body:'Strategic pricing, editorial marketing, and access to our global network of qualified buyers at every price point.' },
               { n:'03', title:'Portfolio & Investment', body:'Identify high-value residential opportunities and build a real estate portfolio positioned for long-term appreciation.' },
             ].map((s, i) => (
               <div key={s.n} style={{ padding: '3rem 2.5rem 3rem 0', borderLeft: i === 0 ? 'none' : '1px solid var(--border)', paddingLeft: i === 0 ? 0 : '2.5rem' }}>
@@ -1076,9 +1076,9 @@ export default function Home() {
           </div>
           <div style={{ display: 'flex', gap: '4rem' }}>
             {[
-              ['Properties', ['Buy','Sell','Rent','Exclusives']],
-              ['Company', ['About Us','Agents','Services']],
-              ['Markets', ['Los Angeles County','San Fernando Valley','Ventura County']],
+              ['Properties', ['Buy','Rent','Sell','Exclusives']],
+              ['Company', ['About Us','Agents','Services','Journal']],
+              ['Markets', ['Beverly Hills','Bel Air','Malibu','Santa Monica']],
             ].map(([heading, links]) => (
               <div key={heading}>
                 <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '1rem' }}>{heading}</div>
