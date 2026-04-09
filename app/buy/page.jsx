@@ -204,17 +204,7 @@ export default function BuyPage() {
           <span className="page-header-label">Properties for Sale</span>
           <h1 className="page-header-h1">Find Your<br/>Dream Home</h1>
           <p className="page-header-sub">Browse active MLS listings across Southern California · Updated daily</p>
-        </div>
-      </div>
-
-
-      {/* ── SEARCH BAR ── */}
-      <section className="search-section">
-        <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
-        <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <h2 className="search-headline">Search<br/>Properties</h2>
-          <p className="search-sub">Find your next home across Southern California</p>
-          <div className="csearch-panel" ref={searchPanelRef}>
+          <div className="csearch-panel" ref={searchPanelRef} style={{ marginTop: '2.5rem' }}>
             <div className="csearch-tabs">
               <button className="csearch-tab tab-active">Buy</button>
             </div>
@@ -247,7 +237,7 @@ export default function BuyPage() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* ── MLS SEARCH ── */}
       <section className="idx-section">
