@@ -715,9 +715,9 @@ export default function Home() {
       {/* ── NAV ── */}
       <nav className={navClass}>
         <div className="nav-inner">
-          <div className="nav-logo" style={{ color: overVideo ? '#ffffff' : 'var(--black)' }}>
+          <a href="/" className="nav-logo" style={{ color: overVideo ? '#ffffff' : 'var(--black)' }}>
             McQueen<span className="sep">·</span>Realty
-          </div>
+          </a>
           <div className="nav-links">
             {[['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Agents','#agents']].map(([label, href]) => (
               <a key={label} href={href} className="nav-link"
