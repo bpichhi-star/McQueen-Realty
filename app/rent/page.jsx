@@ -83,6 +83,8 @@ const SHARED_CSS = `
 export default function RentPage() {
   const [scrolled, setScrolled] = useState(false);
   const [idxLoaded, setIdxLoaded] = useState(false);
+  const [iframeSrc, setIframeSrc] = useState('https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c');
+  const iframeRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [geoLoading, setGeoLoading] = useState(false);
   const searchPanelRef = useRef(null);
@@ -110,10 +112,11 @@ export default function RentPage() {
     } else if (q && NEIGHBORHOOD_ZIPS[q]) {
       zip = NEIGHBORHOOD_ZIPS[q];
     }
-    const params = new URLSearchParams({ LA: 'EN', TRANSACTION_TYPE: 'L' });
-    if (zip) params.set('ZIP', zip);
-    else if (q) params.set('CITY', q);
-    window.location.href = `https://www.crmls.org/servlet/lDisplayListings?${params.toString()}`;
+    let url = 'https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c';
+    if (zip) url += `&postal_code=${zip}`;
+    else if (q) url += `&city=${encodeURIComponent(q)}`;
+    setIdxLoaded(false);
+    setIframeSrc(url);
   };
 
   const handleGeolocate = () => {
@@ -141,7 +144,7 @@ export default function RentPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const IDX_URL = 'https://matrix.crmls.org/Matrix/public/IDX.aspx?idx=eefc378c';
+
 
   return (
     <>
@@ -241,7 +244,8 @@ export default function RentPage() {
             <div className="idx-loader-label">Loading Rentals</div>
           </div>
           <iframe
-            src={IDX_URL}
+            ref={iframeRef}
+            src={iframeSrc}
             frameBorder="0"
             title="McQueen Realty — Rent"
             allowFullScreen
