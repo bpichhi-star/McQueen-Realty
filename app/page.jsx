@@ -1076,15 +1076,15 @@ export default function Home() {
           </div>
           <div style={{ display: 'flex', gap: '4rem' }}>
             {[
-              ['Properties', ['Buy','Rent','Sell','Exclusives']],
-              ['Company', ['About Us','Agents','Services','Journal']],
-              ['Markets', ['Beverly Hills','Bel Air','Malibu','Santa Monica']],
+              ['Properties', [['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['New Listings','/new-listings'],['Exclusives','/search']]],
+              ['Company', [['About Us','#about'],['Agents','#agents'],['Services','#services'],['Contact','#contact']]],
+              ['Markets', [['LA County','/search?src=https%3A%2F%2Fapexidx.com%2Fidx_lite%2Fresults%2FEN_LA%2FlastModified_orderBy%2Fdesc_order%2Factive%2Cshort-sales%2Cforeclosures_homeStatus'],['San Fernando Valley','/search?src=https%3A%2F%2Fapexidx.com%2Fidx_lite%2Fresults%2FEN_LA%2FlastModified_orderBy%2Fdesc_order%2F91301_autosearch'],['Ventura','/search?src=https%3A%2F%2Fapexidx.com%2Fidx_lite%2Fresults%2FEN_LA%2FlastModified_orderBy%2Fdesc_order%2F93001_autosearch']]],
             ].map(([heading, links]) => (
               <div key={heading}>
                 <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.58rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 500, marginBottom: '1rem' }}>{heading}</div>
-                {links.map(l => (
-                  <div key={l} style={{ marginBottom: '0.6rem' }}>
-                    <a href="#" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.8rem', color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>{l}</a>
+                {links.map(([label, href]) => (
+                  <div key={label} style={{ marginBottom: '0.6rem' }}>
+                    <a href={href} style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.8rem', color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>{label}</a>
                   </div>
                 ))}
               </div>
