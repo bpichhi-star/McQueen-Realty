@@ -85,7 +85,7 @@ export default function SellPage() {
       {/* ── HERO ── */}
       <div style={{ width: '100%', height: '88vh', minHeight: 640, overflow: 'hidden', position: 'relative', background: '#000' }}>
         <img
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=85"
+          src="https://images.unsplash.com/photo-1613977257592-4a9a32f9141b?w=1800&q=85"
           alt="Luxury property"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 50%', display: 'block', opacity: 0.82 }}
         />
@@ -93,7 +93,7 @@ export default function SellPage() {
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 2.5rem 5rem', maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ maxWidth: 1400 }}>
             <span style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, display: 'block', marginBottom: '1rem' }}>Seller Advisory · McQueen Realty</span>
-            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontStyle: 'italic', fontSize: 'clamp(4rem, 7vw, 8.5rem)', textTransform: 'none', color: 'var(--white)', lineHeight: 1.0, letterSpacing: '-0.01em', marginBottom: '2rem' }}>Selling Your<br/>Home With<br/>McQueen</h1>
+            <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 'clamp(4rem, 8vw, 9rem)', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 0.88, letterSpacing: '0.02em', marginBottom: '2rem' }}>Selling Your<br/>Home With<br/>McQueen</h1>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
               <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.95rem', lineHeight: 1.85, color: 'rgba(255,255,255,0.6)', fontWeight: 300, maxWidth: 480 }}>Powered by market intelligence and deep local expertise, McQueen Realty puts the full weight of our team behind every listing — boutique service, editorial marketing, results that speak for themselves.</p>
               <a href="#connect" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', background: 'var(--gold)', color: 'var(--white)', padding: '1rem 2.2rem', fontFamily: "'Jost', sans-serif", fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}
