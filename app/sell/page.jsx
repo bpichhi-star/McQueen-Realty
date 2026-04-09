@@ -85,9 +85,9 @@ export default function SellPage() {
       {/* ── HERO ── */}
       <div style={{ width: '100%', height: '88vh', minHeight: 640, overflow: 'hidden', position: 'relative', background: '#000' }}>
         <img
-          src="https://images.unsplash.com/photo-1613977257592-4a9a32f9141b?w=1800&q=85"
+          src="https://images.unsplash.com/photo-1420745981456-b95fe23f5753?w=1800&q=85"
           alt="Luxury property"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 50%', display: 'block', opacity: 0.82 }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', display: 'block', opacity: 0.82 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.72) 100%)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 2.5rem 5rem', maxWidth: 1400, margin: '0 auto' }}>
