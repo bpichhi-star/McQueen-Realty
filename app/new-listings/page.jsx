@@ -76,17 +76,17 @@ export default function NewListingsPage() {
   }, []);
 
   // Sort by newest listed, filter active, max 7 days on market
-  const IDX_URL = 'https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Townhouse_homeType/active_homeStatus/7_dom';
+  const IDX_URL = 'https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Townhouse_homeType/active,short-sales,foreclosures_homeStatus';
 
   return (
     <>
       <style>{SHARED_CSS}</style>
 
-      {/* ── NAV ── */}
+      {/* ââ NAV ââ */}
       <nav className={`nav-wrap ${scrolled ? 'nav-light' : 'nav-dark'}`}>
         <div className="nav-inner">
           <a href="/" className="nav-logo" style={{ color: scrolled ? 'var(--black)' : '#fff' }}>
-            McQueen<span className="sep">·</span>Realty
+            McQueen<span className="sep">Â·</span>Realty
           </a>
           <div className="nav-links">
             {NAV_LINKS.map(([label, href]) => (
@@ -104,27 +104,27 @@ export default function NewListingsPage() {
         </div>
       </nav>
 
-      {/* ── PAGE HEADER ── */}
+      {/* ââ PAGE HEADER ââ */}
       <div className="page-header">
-        <div className="page-header-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
+        <div className="page-header-bg" style={{ backgroundImage: "url('https://raw.githubusercontent.com/bpichhi-star/McQueen-Realty/main/Sell_McQueen.png')" }} />
         <div className="page-header-inner">
           <span className="page-header-label">Just Listed</span>
           <h1 className="page-header-h1">New This<br/>Week</h1>
-          <p className="page-header-sub">Listings that hit the market in the last 7 days · Be first to the door</p>
+          <p className="page-header-sub">Listings that hit the market in the last 7 days Â· Be first to the door</p>
           <div className="new-badge">Updated Daily</div>
         </div>
       </div>
 
-      {/* ── MLS SEARCH ── */}
+      {/* ââ MLS SEARCH ââ */}
       <section className="idx-section">
         <div className="idx-context-bar">
           <div className="idx-context-left">
             <div>
-              <div className="idx-context-label">New Listings · ≤ 7 Days on Market</div>
-              <div className="idx-context-title">Just Listed · Southern California</div>
+              <div className="idx-context-label">New Listings Â· â¤ 7 Days on Market</div>
+              <div className="idx-context-title">Just Listed Â· Southern California</div>
             </div>
             <div className="idx-context-divider" />
-            <div className="idx-live-dot">Live · Updated Daily</div>
+            <div className="idx-live-dot">Live Â· Updated Daily</div>
           </div>
           <div className="idx-context-right">
             <span className="idx-disclaimer">Powered by CRMLS</span>
@@ -139,7 +139,7 @@ export default function NewListingsPage() {
         <div className="idx-clip">
           <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
             <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--black)' }}>
-              McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty
+              McQueen<span style={{ color: 'var(--gold)' }}>Â·</span>Realty
             </div>
             <div className="idx-loader-bar"><div className="idx-loader-fill" /></div>
             <div className="idx-loader-label">Loading New Listings</div>
@@ -147,7 +147,7 @@ export default function NewListingsPage() {
           <iframe
             src={IDX_URL}
             frameBorder="0"
-            title="McQueen Realty — New Listings"
+            title="McQueen Realty â New Listings"
             allowFullScreen
             className={idxLoaded ? 'loaded' : ''}
             onLoad={() => setIdxLoaded(true)}
@@ -166,12 +166,12 @@ export default function NewListingsPage() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
+      {/* ââ FOOTER ââ */}
       <footer>
         <div className="footer-top">
           <div>
             <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--white)', marginBottom: '0.6rem' }}>
-              McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty
+              McQueen<span style={{ color: 'var(--gold)' }}>Â·</span>Realty
             </div>
             <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>28047 Dorothy Dr Unit 303, Agoura Hills CA 91301</div>
           </div>
@@ -193,7 +193,7 @@ export default function NewListingsPage() {
           </div>
         </div>
         <div className="footer-bottom">
-          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>© 2026 McQueen Realty. DRE Licensed · Equal Housing Opportunity. All rights reserved.</div>
+          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>Â© 2026 McQueen Realty. DRE Licensed Â· Equal Housing Opportunity. All rights reserved.</div>
           <div style={{ display: 'flex', gap: '2rem' }}>
             {['Privacy Policy','Terms of Service','Do Not Sell My Info'].map(l => (
               <a key={l} href="#" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.6rem', color: 'rgba(255,255,255,0.18)' }}>{l}</a>
