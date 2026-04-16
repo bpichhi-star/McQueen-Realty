@@ -76,7 +76,7 @@ export default function NewListingsPage() {
   }, []);
 
   // Sort by newest listed, filter active, max 7 days on market
-  const IDX_URL = 'https://apexidx.com/idx_lite/results/EN_LA/listDate_orderBy/desc_order/home,Townhouse_homeType/active_homeStatus/7_dom';
+  const IDX_URL = 'https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/home,Townhouse_homeType/active_homeStatus/7_dom';
 
   return (
     <>
