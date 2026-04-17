@@ -64,7 +64,7 @@ export default function Home() {
     return () => clearInterval(intervalRef.current);
   }, [active]);
 
-  // Neighborhood Ã¢ÂÂ ZIP lookup for ApexIDX
+  // Neighborhood → ZIP lookup for ApexIDX
   const NEIGHBORHOOD_ZIPS = {
     'beverly hills': '90210', 'bel air': '90077', 'malibu': '90265',
     'santa monica': '90401', 'pacific palisades': '90272', 'brentwood': '90049',
@@ -88,10 +88,10 @@ export default function Home() {
     if (/^\d{5}$/.test(q)) {
       locationSegment = `${q}_autosearch`;
     } else if (q && NEIGHBORHOOD_ZIPS[q]) {
-      // Known neighborhood Ã¢ÂÂ use its ZIP
+      // Known neighborhood → use its ZIP
       locationSegment = `${NEIGHBORHOOD_ZIPS[q]}_autosearch`;
     } else if (q) {
-      // Unknown Ã¢ÂÂ try as-is in autosearch (ApexIDX may handle it)
+      // Unknown — try as-is in autosearch (ApexIDX may handle it)
       locationSegment = `${encodeURIComponent(q)}_autosearch`;
     }
 
@@ -152,7 +152,7 @@ export default function Home() {
           const state = data.address?.state_code || data.address?.state || '';
           if (city) setSearchQuery(state ? `${city}, ${state}` : city);
         } catch {
-          // silently fail Ã¢ÂÂ user still sees their location coordinates
+          // silently fail — user still sees their location coordinates
         } finally {
           setGeoLoading(false);
         }
@@ -343,7 +343,7 @@ export default function Home() {
           animation: scrollPulse 2s ease-in-out infinite;
         }
 
-        /* Ã¢ÂÂÃ¢ÂÂ SEARCH SECTION SHELL Ã¢ÂÂÃ¢ÂÂ */
+        /* ── SEARCH SECTION SHELL ── */
         .search-section {
           position: relative; background: var(--near-black); padding: 6rem 2.5rem 7rem;
           border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden;
@@ -377,7 +377,7 @@ export default function Home() {
           to   { transform: rotate(360deg); }
         }
 
-        /* Ã¢ÂÂÃ¢ÂÂ IDX FULL-BLEED Ã¢ÂÂÃ¢ÂÂ */
+        /* ── IDX FULL-BLEED ── */
         .idx-section {
           position: relative;
           background: var(--white);
@@ -440,7 +440,7 @@ export default function Home() {
           color: var(--faint); letter-spacing: 0.04em;
         }
 
-        /* The clipping wrapper Ã¢ÂÂ hides Matrix chrome */
+        /* The clipping wrapper — hides Matrix chrome */
         .idx-clip {
           position: relative;
           overflow: hidden;
@@ -476,7 +476,7 @@ export default function Home() {
           letter-spacing: 0.28em; text-transform: uppercase; color: var(--faint);
         }
 
-        /* The iframe itself Ã¢ÂÂ offset upward to clip Matrix header */
+        /* The iframe itself — offset upward to clip Matrix header */
         .idx-clip iframe {
           position: absolute;
           top: -82px; left: 0;
@@ -704,11 +704,11 @@ export default function Home() {
         .link-gold:hover { color: var(--gold-dark); }
       `}</style>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ NAV Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── NAV ── */}
       <nav className={navClass}>
         <div className="nav-inner">
           <a href="/" className="nav-logo" style={{ color: overVideo ? '#ffffff' : 'var(--black)' }}>
-            McQueen<span className="sep">ÃÂ·</span>Realty
+            McQueen<span className="sep">·</span>Realty
           </a>
           <div className="nav-links">
             {[['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Agents','#agents']].map(([label, href]) => (
@@ -726,7 +726,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ HERO Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── HERO ── */}
       <section className="hero-video-wrap">
         {VIDEOS.map((v, i) => (
           <video
@@ -769,7 +769,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ EDITORIAL Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── EDITORIAL ── */}
       <section style={{ background: 'var(--near-black)', padding: '6rem 2.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
@@ -777,7 +777,7 @@ export default function Home() {
               <span className="sec-label">World of McQueen</span>
               <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 5vw, 5rem)', color: 'var(--white)' }}>Luxury Property<br/>&amp; Lifestyle</h2>
             </div>
-            <a href="/journal" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', borderBottom: '1px solid rgba(255,255,255,0.12)', paddingBottom: 2 }}>View All Ã¢ÂÂ</a>
+            <a href="/journal" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', borderBottom: '1px solid rgba(255,255,255,0.12)', paddingBottom: 2 }}>View All →</a>
           </div>
           <div className="edit-grid">
             {[
@@ -787,8 +787,8 @@ export default function Home() {
                 price: '$14,999,000',
                 address: '1475 Bel Air Road',
                 city: 'Los Angeles, CA 90077',
-                stats: '7 bd  ÃÂ·  9 ba  ÃÂ·  12,027 sqft',
-                sub: 'Warm Modern ÃÂ· Infinity Pool ÃÂ· City & Ocean Views',
+                stats: '7 bd  ·  9 ba  ·  12,027 sqft',
+                sub: 'Warm Modern · Infinity Pool · City & Ocean Views',
                 img: 'https://photos.zillowstatic.com/fp/7dc5b14e37789f156b24ce8ff4e432ee-cc_ft_960.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26669607_autosearch'),
               },
@@ -798,8 +798,8 @@ export default function Home() {
                 price: '$9,995,000',
                 address: '29924 Harvester Road',
                 city: 'Malibu, CA 90265',
-                stats: '5 bd  ÃÂ·  7 ba  ÃÂ·  7,500 sqft',
-                sub: 'New Construction ÃÂ· Ocean Views ÃÂ· Malibu Park',
+                stats: '5 bd  ·  7 ba  ·  7,500 sqft',
+                sub: 'New Construction · Ocean Views · Malibu Park',
                 img: 'https://photos.zillowstatic.com/fp/d3ab9faf398f958423767d8c53528f91-cc_ft_960.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/26672875_autosearch'),
               },
@@ -809,8 +809,8 @@ export default function Home() {
                 price: '$18,800,000',
                 address: '5373 Jed Smith Road',
                 city: 'Hidden Hills, CA 91302',
-                stats: '7 bd  ÃÂ·  10 ba  ÃÂ·  13,802 sqft',
-                sub: 'Guard-Gated Estate ÃÂ· New Build 2024',
+                stats: '7 bd  ·  10 ba  ·  13,802 sqft',
+                sub: 'Guard-Gated Estate · New Build 2024',
                 img: 'https://img.chime.me/imageemb/mls-listing/976/SR26011664/c2926e50/1768613485/original_FMhLDoQgDAbgG1F-OkBnbgO0ZBY-iJIYb2_cfv85x_kjarq5w8oy726mru3rS4SQiX1KASIf4m9tqSMbq8QgkJI5RqgHTA3sLqvjCQAA__8.jpg',
                 href: '/search?src=' + encodeURIComponent('https://apexidx.com/idx_lite/results/EN_LA/lastModified_orderBy/desc_order/SR26011664_autosearch'),
               },
@@ -846,7 +846,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ SEARCH Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── SEARCH ── */}
       <section className="search-section" id="search">
         <div className="search-bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')" }} />
         <div className="search-content" style={{ maxWidth: 1400, margin: '0 auto' }}>
@@ -856,12 +856,12 @@ export default function Home() {
           {/* Compass Panel */}
           <div className="csearch-panel" ref={searchPanelRef}>
 
-            {/* Ã¢ÂÂÃ¢ÂÂ Tabs Ã¢ÂÂÃ¢ÂÂ */}
+            {/* ── Tabs ── */}
             <div className="csearch-tabs">
               <button className="csearch-tab tab-active">Buy</button>
             </div>
 
-            {/* Ã¢ÂÂÃ¢ÂÂ Location Input Ã¢ÂÂÃ¢ÂÂ */}
+            {/* ── Location Input ── */}
             <div className="csearch-input-row">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" strokeWidth="2" strokeLinecap="round">
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -894,7 +894,7 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Ã¢ÂÂÃ¢ÂÂ Filter Pills Ã¢ÂÂÃ¢ÂÂ */}
+            {/* ── Filter Pills ── */}
             <div className="csearch-filters">
               <button className="csearch-pill" onClick={handleSearch}>
                 More Filters
@@ -912,18 +912,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ MLS SEARCH Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── MLS SEARCH ── */}
       <section className="idx-section" id="mls-search">
 
-        {/* Context bar Ã¢ÂÂ McQueen branded, sits above iframe */}
+        {/* Context bar — McQueen branded, sits above iframe */}
         <div className="idx-context-bar">
           <div className="idx-context-left">
             <div>
               <div className="idx-context-label">Property Search</div>
-              <div className="idx-context-title">Live MLS Listings ÃÂ· Southern California</div>
+              <div className="idx-context-title">Live MLS Listings · Southern California</div>
             </div>
             <div className="idx-context-divider" />
-            <div className="idx-live-dot">Live ÃÂ· Updated Daily</div>
+            <div className="idx-live-dot">Live · Updated Daily</div>
           </div>
           <div className="idx-context-right">
             <span className="idx-disclaimer">Powered by CRMLS</span>
@@ -936,13 +936,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ApexIDX full search Ã¢ÂÂ map + listings + filters */}
+        {/* ApexIDX full search — map + listings + filters */}
         <div className="idx-clip">
           <div className={`idx-loader ${idxLoaded ? 'hidden' : ''}`}>
             <div style={{
               fontFamily: "'Jost', sans-serif", fontWeight: 600, fontSize: '0.72rem',
               letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--black)'
-            }}>McQueen<span style={{ color: 'var(--gold)' }}>ÃÂ·</span>Realty</div>
+            }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
             <div className="idx-loader-bar"><div className="idx-loader-fill" /></div>
             <div className="idx-loader-label">Loading Live Listings</div>
           </div>
@@ -971,7 +971,7 @@ export default function Home() {
 
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ SERVICES Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── SERVICES ── */}
       <section id="services" style={{ borderTop: '1px solid var(--border)', padding: '6rem 2.5rem' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
@@ -982,7 +982,7 @@ export default function Home() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid var(--border)' }}>
             {[
-              { n:'01', title:'Buyer Representation', body:'We guide discerning buyers through the acquisition of extraordinary properties Ã¢ÂÂ from private previews to negotiation and close.' },
+              { n:'01', title:'Buyer Representation', body:'We guide discerning buyers through the acquisition of extraordinary properties — from private previews to negotiation and close.' },
               { n:'02', title:'Seller Advisory', body:'Strategic pricing, editorial marketing, and access to our global network of qualified buyers at every price point.' },
               { n:'03', title:'Portfolio & Investment', body:'Identify high-value residential opportunities and build a real estate portfolio positioned for long-term appreciation.' },
             ].map((s, i) => (
@@ -996,7 +996,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ ABOUT Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── ABOUT ── */}
       <section id="about" className="about-grid">
         <div style={{ background: 'linear-gradient(150deg,#D8D8D8,#BEBEBE)', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', bottom: '2.5rem', right: '2.5rem', background: 'rgba(255,255,255,0.96)', padding: '1.2rem 1.8rem', borderLeft: '2px solid var(--gold)' }}>
@@ -1007,7 +1007,7 @@ export default function Home() {
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '5rem 4rem', borderLeft: '1px solid var(--border)' }}>
           <span className="sec-label">About McQueen Realty</span>
           <h2 className="sec-h2" style={{ fontSize: 'clamp(2.5rem, 4vw, 4rem)', marginBottom: '2rem' }}>A Standard Built<br/>On Trust</h2>
-          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--mid)', fontWeight: 300, marginBottom: '1.4rem' }}>McQueen Realty was founded on a single conviction: every client Ã¢ÂÂ whether purchasing their first estate or expanding a multi-property portfolio Ã¢ÂÂ deserves the same caliber of attention and strategy.</p>
+          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--mid)', fontWeight: 300, marginBottom: '1.4rem' }}>McQueen Realty was founded on a single conviction: every client — whether purchasing their first estate or expanding a multi-property portfolio — deserves the same caliber of attention and strategy.</p>
           <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--mid)', fontWeight: 300, marginBottom: '2.5rem' }}>Our team combines deep regional market knowledge with a genuine passion for architecture and design. Since 2008, every transaction has been handled with discretion, precision, and genuine investment in the outcome.</p>
           <a href="#contact" className="link-gold">
             Work With Us{' '}
@@ -1018,18 +1018,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ QUOTE Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── QUOTE ── */}
       <div style={{ background: 'var(--black)', padding: '5rem 2.5rem', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
         <blockquote style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontStyle: 'italic', fontSize: 'clamp(2rem, 4vw, 4rem)', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 1, maxWidth: 900, margin: '0 auto 1.5rem' }}>&quot;Every Exceptional Home Has a Story.&quot;</blockquote>
-        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', fontWeight: 300 }}>Ã¢ÂÂ McQueen Realty, est. 2008</p>
+        <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.78rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', fontWeight: 300 }}>— McQueen Realty, est. 2008</p>
       </div>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ CONTACT Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── CONTACT ── */}
       <section id="contact" className="contact-grid">
         <div style={{ background: 'var(--near-black)', padding: '6rem 3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <span className="sec-label">Begin the Conversation</span>
           <h2 className="sec-h2" style={{ fontSize: 'clamp(2.8rem, 4vw, 4.5rem)', color: 'var(--white)', marginBottom: '2rem' }}>We&apos;d Love<br/>to Hear<br/>From You</h2>
-          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.88rem', lineHeight: 1.8, color: 'rgba(255,255,255,0.38)', fontWeight: 300, maxWidth: 340, marginBottom: '3rem' }}>Whether buying, selling, or simply exploring Ã¢ÂÂ our team responds within 24 hours.</p>
+          <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.88rem', lineHeight: 1.8, color: 'rgba(255,255,255,0.38)', fontWeight: 300, maxWidth: 340, marginBottom: '3rem' }}>Whether buying, selling, or simply exploring — our team responds within 24 hours.</p>
           {[['Phone','818.591.1600'],['Email','info@mcqueenrealty.com'],['Office','28047 Dorothy Dr Unit 303, Agoura Hills CA 91301']].map(([l,v]) => (
             <div key={l} style={{ marginBottom: '1.2rem' }}>
               <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.56rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', marginBottom: '0.2rem' }}>{l}</div>
@@ -1059,11 +1059,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ã¢ÂÂÃ¢ÂÂ FOOTER Ã¢ÂÂÃ¢ÂÂ */}
+      {/* ── FOOTER ── */}
       <footer style={{ background: 'var(--black)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '4rem 2.5rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.06)', gap: '2rem', flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--white)', marginBottom: '0.6rem' }}>McQueen<span style={{ color: 'var(--gold)' }}>ÃÂ·</span>Realty</div>
+            <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--white)', marginBottom: '0.6rem' }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
             <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>28047 Dorothy Dr Unit 303, Agoura Hills CA 91301</div>
           </div>
           <div style={{ display: 'flex', gap: '4rem' }}>
@@ -1084,7 +1084,7 @@ export default function Home() {
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.4rem 2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>ÃÂ© 2026 McQueen Realty. DRE Licensed ÃÂ· Equal Housing Opportunity. All rights reserved.</div>
+          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>© 2026 McQueen Realty. DRE Licensed · Equal Housing Opportunity. All rights reserved.</div>
           <div style={{ display: 'flex', gap: '2rem' }}>
             {['Privacy Policy','Terms of Service','Do Not Sell My Info'].map(l => (
               <a key={l} href="#" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.6rem', color: 'rgba(255,255,255,0.18)' }}>{l}</a>
