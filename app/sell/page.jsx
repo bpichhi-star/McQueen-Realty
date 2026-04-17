@@ -83,7 +83,7 @@ export default function SellPage() {
       </nav>
 
       {/* ── HERO ── */}
-      <div style={{ width: '100%', height: '88vh', minHeight: 640, overflow: 'hidden', position: 'relative', background: '#111', backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80')", backgroundSize: 'cover', backgroundPosition: 'center 50%' }}>
+      <div style={{ width: '100%', height: '88vh', minHeight: 640, overflow: 'hidden', position: 'relative', background: '#111', backgroundImage: "url('https://raw.githubusercontent.com/bpichhi-star/McQueen-Realty/main/Sell_McQueen.png')", backgroundSize: 'cover', backgroundPosition: 'center 50%' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.75) 100%)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 2.5rem 5rem', maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ maxWidth: 1400 }}>
