@@ -60,11 +60,11 @@ export default function RentPage() {
         .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 2.5rem; flex-wrap: wrap; gap: 1rem; }
       `}</style>
 
-      {/* ââ NAV ââ */}
+      {/* ── NAV ── */}
       <nav className={`nav-wrap ${scrolled ? 'nav-light' : 'nav-dark'}`}>
         <div className="nav-inner">
           <a href="/" className="nav-logo" style={{ color: scrolled ? 'var(--black)' : '#fff' }}>
-            McQueen<span className="sep">Â·</span>Realty
+            McQueen<span className="sep">·</span>Realty
           </a>
           <div className="nav-links">
             {NAV_LINKS.map(([label, href]) => (
@@ -82,7 +82,7 @@ export default function RentPage() {
         </div>
       </nav>
 
-      {/* ââ HERO ââ */}
+      {/* ── HERO ── */}
       <div style={{ background: 'var(--near-black)', padding: '9rem 2.5rem 5rem', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1800&q=80')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12 }} />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 1400, margin: '0 auto' }}>
@@ -92,11 +92,11 @@ export default function RentPage() {
         </div>
       </div>
 
-      {/* ââ WHY US ââ */}
+      {/* ── WHY US ── */}
       <section style={{ borderBottom: '1px solid var(--border)', padding: '5rem 2.5rem' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--border)' }}>
           {[
-            { n: '01', title: 'Curated Listings', body: 'We hand-select premium rental properties that meet our quality standards â from luxury apartments to gated estates.' },
+            { n: '01', title: 'Curated Listings', body: 'We hand-select premium rental properties that meet our quality standards — from luxury apartments to gated estates.' },
             { n: '02', title: 'Personal Matching', body: 'Tell us your criteria and budget. We handle the search and connect you directly with verified landlords and listing agents.' },
             { n: '03', title: 'Full-Service Support', body: 'From first showing to lease signing, our team guides you through every step of the rental process.' },
           ].map((s) => (
@@ -109,7 +109,7 @@ export default function RentPage() {
         </div>
       </section>
 
-      {/* ââ INQUIRY FORM ââ */}
+      {/* ── INQUIRY FORM ── */}
       <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid var(--border)' }}>
         <div style={{ background: 'var(--near-black)', padding: '6rem 3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <span style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, display: 'block', marginBottom: '1rem' }}>Rental Inquiry</span>
@@ -172,11 +172,11 @@ export default function RentPage() {
         </div>
       </section>
 
-      {/* ââ FOOTER ââ */}
+      {/* ── FOOTER ── */}
       <footer>
         <div className="footer-top">
           <div>
-            <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--white)', marginBottom: '0.6rem' }}>McQueen<span style={{ color: 'var(--gold)' }}>Â·</span>Realty</div>
+            <div style={{ fontFamily: "'Jost',sans-serif", fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--white)', marginBottom: '0.6rem' }}>McQueen<span style={{ color: 'var(--gold)' }}>·</span>Realty</div>
             <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>28047 Dorothy Dr Unit 303, Agoura Hills CA 91301</div>
           </div>
           <div style={{ display: 'flex', gap: '4rem' }}>
@@ -197,7 +197,7 @@ export default function RentPage() {
           </div>
         </div>
         <div className="footer-bottom">
-          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>Â© 2026 McQueen Realty. DRE Licensed Â· Equal Housing Opportunity. All rights reserved.</div>
+          <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>© 2026 McQueen Realty. DRE Licensed · Equal Housing Opportunity. All rights reserved.</div>
           <div style={{ display: 'flex', gap: '2rem' }}>
             {['Privacy Policy','Terms of Service','Do Not Sell My Info'].map(l => (
               <a key={l} href="#" style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.6rem', color: 'rgba(255,255,255,0.18)' }}>{l}</a>
