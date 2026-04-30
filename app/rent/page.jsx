@@ -5,8 +5,10 @@ const NAV_LINKS = [['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Agents','#
 
 export default function RentPage() {
   const [scrolled, setScrolled] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', phone: '', area: '', beds: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', area: '', beds: '', message: '', website: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -14,9 +16,25 @@ export default function RentPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || !form.email) return;
-    setSubmitted(true);
+    if (submitting) return;
+    setSubmitting(true);
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'rent', ...form }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Could not send');
+      setSubmitted(true);
+    } catch (err) {
+      setErrorMsg(err.message || 'Something went wrong');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -160,13 +178,22 @@ export default function RentPage() {
                 <label className="field-label">Additional Details / Budget</label>
                 <textarea className="field-textarea" rows={4} placeholder="Tell us your budget, move-in date, must-haves..." value={form.message} onChange={e => setForm({...form, message: e.target.value})} />
               </div>
-              <button onClick={handleSubmit} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.7rem', background: 'var(--black)', color: 'var(--white)', padding: '1rem 2.4rem', fontFamily: "'Jost', sans-serif", fontSize: '0.7rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 500, border: 'none', cursor: 'pointer', width: '100%', transition: 'background 0.2s' }}
-                onMouseOver={e => e.currentTarget.style.background='var(--gold)'}
-                onMouseOut={e => e.currentTarget.style.background='var(--black)'}>
-                Submit Rental Inquiry
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                </svg>
+              {/* honeypot */}
+              <input type="text" name="website" value={form.website} onChange={e => setForm({...form, website: e.target.value})} tabIndex={-1} autoComplete="off" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} aria-hidden="true" />
+              {errorMsg && (
+                <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.78rem', color: '#B53A3A', marginBottom: '1rem', letterSpacing: '0.04em' }}>
+                  {errorMsg}. Please try again or call 818.591.1600.
+                </div>
+              )}
+              <button onClick={handleSubmit} disabled={submitting} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.7rem', background: 'var(--black)', color: 'var(--white)', padding: '1rem 2.4rem', fontFamily: "'Jost', sans-serif", fontSize: '0.7rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 500, border: 'none', cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.6 : 1, width: '100%', transition: 'background 0.2s' }}
+                onMouseOver={e => { if (!submitting) e.currentTarget.style.background='var(--gold)'; }}
+                onMouseOut={e => { if (!submitting) e.currentTarget.style.background='var(--black)'; }}>
+                {submitting ? 'Sending…' : 'Submit Rental Inquiry'}
+                {!submitting && (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                )}
               </button>
             </>
           )}

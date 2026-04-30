@@ -30,6 +30,9 @@ export default function Home() {
   const [openFilter, setOpenFilter] = useState(null);
   const [geoLoading, setGeoLoading] = useState(false);
   const [idxLoaded, setIdxLoaded] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '', website: '' });
+  const [contactStatus, setContactStatus] = useState('idle'); // 'idle' | 'sending' | 'sent' | 'error'
+  const [contactError, setContactError] = useState('');
   const searchPanelRef = useRef(null);
   const videoRefs = useRef([]);
   const intervalRef = useRef(null);
@@ -114,6 +117,28 @@ export default function Home() {
     ].filter(Boolean).join('/');
 
     return `https://apexidx.com/idx_lite/results/EN_LA/${segments}`;
+  };
+
+  const handleContactSubmit = async (e) => {
+    e?.preventDefault?.();
+    if (contactStatus === 'sending') return;
+    setContactStatus('sending');
+    setContactError('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'contact', ...contactForm }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || 'Could not send message');
+      }
+      setContactStatus('sent');
+    } catch (err) {
+      setContactStatus('error');
+      setContactError(err.message || 'Something went wrong');
+    }
   };
 
   const handleSearch = () => {
@@ -1041,22 +1066,42 @@ export default function Home() {
         </div>
         <div style={{ padding: '6rem 3.5rem', background: 'var(--off-white)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
-            {[['Your Name','text','name'],['Email Address','email','email']].map(([label, type, name]) => (
-              <div key={name} className="field-wrap">
-                <label className="field-label">{label}</label>
-                <input className="field-input" type={type} name={name} />
+            {contactStatus === 'sent' ? (
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '3rem', textTransform: 'uppercase', color: 'var(--black)', lineHeight: 0.9, marginBottom: '1rem' }}>Message<br/>Sent</div>
+                <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.9rem', color: 'var(--mid)', fontWeight: 300, lineHeight: 1.8 }}>Thank you for reaching out. A member of our team will respond within 24 hours.</p>
               </div>
-            ))}
-            <div className="field-wrap" style={{ marginBottom: '2.5rem' }}>
-              <label className="field-label">Message</label>
-              <textarea className="field-textarea" name="message" rows={4} />
-            </div>
-            <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-              Send Inquiry{' '}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-              </svg>
-            </button>
+            ) : (
+              <form onSubmit={handleContactSubmit}>
+                {/* honeypot — hidden from users, attractive to bots */}
+                <input type="text" name="website" value={contactForm.website} onChange={(e) => setContactForm({ ...contactForm, website: e.target.value })} tabIndex={-1} autoComplete="off" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} aria-hidden="true" />
+                <div className="field-wrap">
+                  <label className="field-label">Your Name</label>
+                  <input className="field-input" type="text" name="name" required value={contactForm.name} onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })} />
+                </div>
+                <div className="field-wrap">
+                  <label className="field-label">Email Address</label>
+                  <input className="field-input" type="email" name="email" required value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} />
+                </div>
+                <div className="field-wrap" style={{ marginBottom: '2.5rem' }}>
+                  <label className="field-label">Message</label>
+                  <textarea className="field-textarea" name="message" rows={4} value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} />
+                </div>
+                {contactStatus === 'error' && (
+                  <div style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.78rem', color: '#B53A3A', marginBottom: '1rem', letterSpacing: '0.04em' }}>
+                    {contactError || 'Something went wrong. Please try again or call 818.591.1600.'}
+                  </div>
+                )}
+                <button type="submit" disabled={contactStatus === 'sending'} className="btn-primary" style={{ width: '100%', justifyContent: 'center', opacity: contactStatus === 'sending' ? 0.6 : 1, cursor: contactStatus === 'sending' ? 'wait' : 'pointer' }}>
+                  {contactStatus === 'sending' ? 'Sending…' : 'Send Inquiry'}{' '}
+                  {contactStatus !== 'sending' && (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  )}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>
