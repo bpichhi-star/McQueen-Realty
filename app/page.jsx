@@ -295,10 +295,10 @@ export default function Home() {
           position: absolute; inset: 0;
           background: linear-gradient(
             180deg,
-            rgba(0,0,0,0.30) 0%,
-            rgba(0,0,0,0.15) 35%,
-            rgba(0,0,0,0.50) 70%,
-            rgba(0,0,0,0.88) 100%
+            rgba(0,0,0,0.10) 0%,
+            rgba(0,0,0,0) 30%,
+            rgba(0,0,0,0) 60%,
+            rgba(0,0,0,0.55) 100%
           );
         }
 
@@ -358,6 +358,7 @@ export default function Home() {
           font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: italic;
           font-size: clamp(3.5rem, 8vw, 9rem); line-height: 0.88; letter-spacing: -0.01em;
           text-transform: uppercase; color: var(--white); margin-bottom: 1.2rem;
+          text-shadow: 0 2px 24px rgba(0,0,0,0.4);
         }
         .search-sub {
           font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 300;
@@ -823,7 +824,7 @@ export default function Home() {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                   }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%)' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)' }} />
                   <div style={{ position: 'absolute', top: '1.2rem', left: '1.2rem', background: 'var(--gold)', color: 'var(--black)', fontFamily: "'Jost', sans-serif", fontSize: '0.54rem', letterSpacing: '0.22em', padding: '0.32rem 0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>{e.tag}</div>
                   <div style={{ position: 'absolute', bottom: '1.2rem', right: '1.2rem', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '1.6rem', color: 'var(--white)', letterSpacing: '0.02em', lineHeight: 1, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{e.price}</div>
                 </div>
