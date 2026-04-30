@@ -32,11 +32,11 @@ const SHARED_CSS = `
   .nav-cta:hover { background: var(--gold-dark); }
 
   .page-header { background: var(--near-black); padding: 9rem 2.5rem 4rem; border-bottom: 1px solid rgba(255,255,255,0.06); position: relative; overflow: hidden; }
-  .page-header-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.12; }
+  .page-header-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.6; }
   .page-header-inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; }
   .page-header-label { font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-weight: 500; display: block; margin-bottom: 1rem; }
-  .page-header-h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.5rem, 7vw, 8rem); text-transform: uppercase; color: var(--white); line-height: 0.88; letter-spacing: -0.01em; }
-  .page-header-sub { font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 300; letter-spacing: 0.06em; color: rgba(255,255,255,0.45); margin-top: 1.2rem; }
+  .page-header-h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.5rem, 7vw, 8rem); text-transform: uppercase; color: var(--white); line-height: 0.88; letter-spacing: -0.01em; text-shadow: 0 2px 24px rgba(0,0,0,0.5); }
+  .page-header-sub { font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 300; letter-spacing: 0.06em; color: rgba(255,255,255,0.78); margin-top: 1.2rem; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
 
   .idx-section { background: var(--white); border-top: 1px solid var(--border); }
   .idx-context-bar { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 2.5rem; border-bottom: 1px solid var(--border); background: var(--white); }
@@ -67,7 +67,7 @@ const SHARED_CSS = `
   .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 2.5rem; flex-wrap: wrap; gap: 1rem; }
   .sec-label { font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-weight: 500; display: block; margin-bottom: 1rem; }
   .search-section { position: relative; background: var(--near-black); padding: 5rem 2.5rem 6rem; border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
-  .search-bg { position: absolute; inset: 0; background-size: cover; background-position: center 30%; opacity: 0.18; }
+  .search-bg { position: absolute; inset: 0; background-size: cover; background-position: center 30%; opacity: 0.6; }
   .search-content { position: relative; z-index: 2; }
   .search-headline { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: italic; font-size: clamp(3rem, 6vw, 7rem); line-height: 0.88; letter-spacing: -0.01em; text-transform: uppercase; color: var(--white); margin-bottom: 1rem; }
   .search-sub { font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 300; letter-spacing: 0.08em; color: rgba(255,255,255,0.42); margin-bottom: 2.5rem; }
