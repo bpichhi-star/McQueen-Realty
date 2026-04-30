@@ -84,11 +84,12 @@ export default function RentPage() {
 
       {/* ── HERO ── */}
       <div style={{ background: 'var(--near-black)', padding: '9rem 2.5rem 5rem', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1800&q=80')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('https://raw.githubusercontent.com/bpichhi-star/McQueen-Realty/main/Rent_McQueen.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 1 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 100%)' }} />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 1400, margin: '0 auto' }}>
           <span style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, display: 'block', marginBottom: '1rem' }}>Luxury Rentals</span>
           <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(3.5rem, 7vw, 8rem)', textTransform: 'uppercase', color: 'var(--white)', lineHeight: 0.88, letterSpacing: '-0.01em', marginBottom: '1.5rem', textShadow: '0 2px 24px rgba(0,0,0,0.5)' }}>Rent in<br/>Style</h1>
-          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.88rem', fontWeight: 300, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.78)', maxWidth: 520, lineHeight: 1.8, textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>McQueen Realty represents premium rental properties across Southern California. Tell us what you're looking for and we'll match you with available listings personally.</p>
+          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.88rem', fontWeight: 300, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.88)', maxWidth: 520, lineHeight: 1.8, textShadow: '0 1px 12px rgba(0,0,0,0.7)' }}>McQueen Realty represents premium rental properties across Southern California. Tell us what you're looking for and we'll match you with available listings personally.</p>
         </div>
       </div>
 
