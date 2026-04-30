@@ -350,7 +350,7 @@ export default function Home() {
         }
         .search-bg {
           position: absolute; inset: 0; background-size: cover;
-          background-position: center 30%; opacity: 0.18; transition: opacity 0.6s;
+          background-position: center 30%; opacity: 0.6; transition: opacity 0.6s;
         }
         .search-content { position: relative; z-index: 2; }
 
@@ -362,7 +362,8 @@ export default function Home() {
         }
         .search-sub {
           font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 300;
-          letter-spacing: 0.08em; color: rgba(255,255,255,0.42); margin-bottom: 2.5rem;
+          letter-spacing: 0.08em; color: rgba(255,255,255,0.75); margin-bottom: 2.5rem;
+          text-shadow: 0 1px 8px rgba(0,0,0,0.5);
         }
 
         .csearch-geo-btn {
